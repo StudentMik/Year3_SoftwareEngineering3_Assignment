@@ -3,7 +3,7 @@ package Soft_Eng;
 import java.sql.*;
 import java.util.Scanner;
 
-public class Order {
+public class Publication {
 	static Connection con = null;
 	static Statement stmt = null;
 	static ResultSet rs = null;
@@ -16,42 +16,26 @@ public class Order {
 			
 			String str = "INSERT INTO employees VALUES(null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
-			System.out.println("Please Enter the CustomerId");
-			String CustomerId = in.next();
-			
 			System.out.println("Please Enter the PublicationId");
 			String PublicationId = in.next();
 			
-			System.out.println("Please Enter the address1");
-			String address1 = in.next();
+			System.out.println("Please Enter the PublicationName");
+			String PublicationName = in.next();
 			
-			System.out.println("Please Enter the Publication1");
-			String Publication1 = in.next();
+			System.out.println("Please Enter the PublicationPrice");
+			String PublicationPrice = in.next();
 			
-			System.out.println("Please Enter the Publication2");
-			String Publication2 = in.next();
+			System.out.println("Please Enter the Schedule");
+			String Schedule = in.next();
 			
-			System.out.println("Please Enter the Publication3");
-			String Publication3 = in.next();
-			
-			System.out.println("Please Enter the Publication4");
-			String Publication4 = in.next();
-			
-			System.out.println("Please Enter the Publication5");
-			String Publication5 = in.next();
+
 			
 			
 			PreparedStatement pstmt = con.prepareStatement(str);
-			pstmt.setString(3, CustomerId);
-			pstmt.setString(3, PublicationId);
-			pstmt.setString(4, address1);
-			pstmt.setString(5, town);
-			pstmt.setString(6, contactNo);
-			pstmt.setString(7, Publication1);
-			pstmt.setString(8, Publication2);
-			pstmt.setString(9, Publication3);
-			pstmt.setString(10, Publication4);
-			pstmt.setString(11, Publication5);
+			pstmt.setString(1, PublicationId);
+			pstmt.setString(2, PublicationName);
+			pstmt.setString(3, PublicationPrice);
+			pstmt.setString(4, Schedule);
 
 			int rows = pstmt.executeUpdate();
 			

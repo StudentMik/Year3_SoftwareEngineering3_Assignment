@@ -1,11 +1,7 @@
 package Soft_Eng;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
+import java.sql.*;
+import java.util.Scanner;
 
 public class Customer {
 	static Connection con = null;
@@ -13,21 +9,59 @@ public class Customer {
 	static ResultSet rs = null;
 
 	public static void main(String[] args) {
+		
+		Scanner in = new Scanner(System.in);
 		init_db(); // open the connection to the database
 		try {
-			String str = "INSERT INTO Customer VALUES(null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			String str = "INSERT INTO employees VALUES(null,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+			System.out.println("Please Enter the FirstNAME");
+			String firstname = in.next();
+			
+			System.out.println("Please Enter the LastName");
+			String LastName = in.next();
+			
+			System.out.println("Please Enter the CustomerId");
+			String CustomerId = in.next();
+			
+			System.out.println("Please Enter the address");
+			String address = in.next();
+			
+			System.out.println("Please Enter the area");
+			String area = in.next();
+			
+			System.out.println("Please Enter the contactNo");
+			String contactNo = in.next();
+			
+			System.out.println("Please Enter the Publication1");
+			String Publication1 = in.next();
+			
+			System.out.println("Please Enter the Publication2");
+			String Publication2 = in.next();
+			
+			System.out.println("Please Enter the Publication3");
+			String Publication3 = in.next();
+			
+			System.out.println("Please Enter the Publication4");
+			String Publication4 = in.next();
+			
+			System.out.println("Please Enter the Publication5");
+			String Publication5 = in.next();
+			
+			
 			PreparedStatement pstmt = con.prepareStatement(str);
-			pstmt.setString(1, "Joe");
-			pstmt.setString(2, "Mullins");
-			pstmt.setString(3, "Big Long Road");
-			pstmt.setString(4, "null");
-			pstmt.setString(5, "Athlone");
-			pstmt.setString(6, "08712345678");
-			pstmt.setString(7, "1980-12-21");
-			pstmt.setString(8, "M");
-			pstmt.setString(9, "Manager");
-			pstmt.setDouble(10, 24.99);
+			pstmt.setString(1, firstname);
+			pstmt.setString(2, LastName);
+			pstmt.setString(3, CustomerId);
+			pstmt.setString(4, address);
+			pstmt.setString(5, area);
+			pstmt.setString(6, contactNo);
+			pstmt.setString(7, Publication1);
+			pstmt.setString(8, Publication2);
+			pstmt.setString(9, Publication3);
+			pstmt.setString(10, Publication4);
+			pstmt.setString(11, Publication5);
 
 			int rows = pstmt.executeUpdate();
 			
