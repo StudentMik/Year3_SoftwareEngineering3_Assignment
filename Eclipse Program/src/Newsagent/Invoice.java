@@ -1,6 +1,6 @@
 package Newsagent;
 
-public class Deliveries
+public class Invoice
 {
 	
 }
