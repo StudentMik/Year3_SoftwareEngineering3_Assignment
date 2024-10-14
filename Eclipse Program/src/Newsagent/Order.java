@@ -1,7 +1,7 @@
 package Newsagent;
 
-public class Orders
-{
+
+
 	public class Order {
 	    private int customerId; //needs customer id to create order
 	    private long customerPhoneNumber; // need customer phone number to create order
@@ -52,4 +52,4 @@ public class Orders
 	    }
 	}
 
-}
+
