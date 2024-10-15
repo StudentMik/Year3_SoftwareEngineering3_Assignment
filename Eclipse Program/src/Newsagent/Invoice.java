@@ -4,13 +4,15 @@ public class Invoice
 {
 	private int customerID;
 	private int quantity;
+	private float invoiceDate;
 	private double invoiceAmount; //total cost
 	private double pricePerItem;  // or publication price
 	private String publicationName; //or id
 	
-	public Invoice(int customerID, int quantity, double invoiceAmount, double pricePerItem, String publicationName) {
+	public Invoice(int customerID, int quantity, float invoiceDate, double invoiceAmount, double pricePerItem, String publicationName) {
 		this.customerID = customerID;
 		this.quantity = quantity;
+		this.invoiceDate = invoiceDate
 		this.invoiceAmount = invoiceAmount;
 		this.pricePerItem = pricePerItem;
 		this.publicationName = publicationName;
@@ -30,6 +32,12 @@ public class Invoice
 		this.quantity = quantity;
 	}
 
+	public float getInvoiceDate() {
+		return invoiceDate;
+	}
+	public void setInvoiceDate(float invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
 	public double getInvoiceAmount() {
 		return invoiceAmount;
 	}
