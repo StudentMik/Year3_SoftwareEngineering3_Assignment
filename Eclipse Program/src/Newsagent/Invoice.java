@@ -1,4 +1,4 @@
-package Newsagent;
+package Newsagent; 
 
 public class Invoice
 {
@@ -51,10 +51,8 @@ public class Invoice
 		this.publicationName = publicationName;
 	}
 	
-	public static void main(String args[]) {
-		
+	public static void main(String args[]) {	
 	}
-	
 }
 
 
