@@ -39,7 +39,7 @@ public class Deliveries
 		this.orderId = orderId;
 	}
 
-	public int getDeliveryDate() {
+	public float getDeliveryDate() {
 		return deliveryDate;
 	}
 	public void setDeliveryDate(float deliveryDate) {
