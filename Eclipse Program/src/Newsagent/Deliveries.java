@@ -16,7 +16,7 @@ public class Deliveries
 			String activeDays, boolean deliveryStatus, boolean deliveriesPaused) {
 		this.driverID = driverID;
 		this.orderId = orderId;
-		thisdeliverDate = deliveryDate;
+		this.deliveryDate = deliveryDate;
 		this.publicationID = publicationID;
 		this.customerName = customerName;
 		this.deliveryAddress = deliveryAddress;
