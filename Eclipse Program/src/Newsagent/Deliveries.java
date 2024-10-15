@@ -4,7 +4,7 @@ public class Deliveries
 {
 	private int driverID;
 	private int orderId;
-	private double deliveryDate;
+	private float deliveryDate;
 	private String publicationID;  //publicationsdelivered
 	private String customerName; 
 	private String deliveryAddress; //deliveryarea
@@ -42,7 +42,7 @@ public class Deliveries
 	public int getDeliveryDate() {
 		return deliveryDate;
 	}
-	public void setDeliveryDate(double deliveryDate) {
+	public void setDeliveryDate(float deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 	
