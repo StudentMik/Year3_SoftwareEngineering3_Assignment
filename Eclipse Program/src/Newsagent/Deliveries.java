@@ -4,6 +4,7 @@ public class Deliveries
 {
 	private int driverID;
 	private int orderId;
+	private double deliveryDate;
 	private String publicationID;  //publicationsdelivered
 	private String customerName; 
 	private String deliveryAddress; //deliveryarea
@@ -11,10 +12,11 @@ public class Deliveries
 	private boolean deliveryStatus;
 	private boolean deliveriesPaused;
 	
-	public Deliveries(int driverID, int orderId, String publicationID, String customerName, String deliveryAddress,
+	public Deliveries(int driverID, int orderId, double deliveryDate, String publicationID, String customerName, String deliveryAddress,
 			String activeDays, boolean deliveryStatus, boolean deliveriesPaused) {
 		this.driverID = driverID;
 		this.orderId = orderId;
+		thisdeliverDate = deliveryDate;
 		this.publicationID = publicationID;
 		this.customerName = customerName;
 		this.deliveryAddress = deliveryAddress;
@@ -37,6 +39,13 @@ public class Deliveries
 		this.orderId = orderId;
 	}
 
+	public int getDeliveryDate() {
+		return deliveryDate;
+	}
+	public void setDeliveryDate(double deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+	
 	public String getPublicationID() {
 		return publicationID;
 	}
