@@ -4,15 +4,15 @@ public class Deliveries
 {
 	private int driverID;
 	private int orderId;
-	private float deliveryDate;
-	private String publicationID;  //publicationsdelivered
+	private int deliveryDate;
+	private String publicationID;  //publications delivered
 	private String customerName; 
-	private String deliveryAddress; //deliveryarea
-	private String activeDays;  //deliveryDate
+	private String deliveryAddress; //delivery area
+	private String activeDays;  //delivery Date
 	private boolean deliveryStatus;
 	private boolean deliveriesPaused;
 	
-	public Deliveries(int driverID, int orderId, double deliveryDate, String publicationID, String customerName, String deliveryAddress,
+	public Deliveries(int driverID, int orderId, int deliveryDate, String publicationID, String customerName, String deliveryAddress,
 			String activeDays, boolean deliveryStatus, boolean deliveriesPaused) {
 		this.driverID = driverID;
 		this.orderId = orderId;
@@ -42,7 +42,7 @@ public class Deliveries
 	public float getDeliveryDate() {
 		return deliveryDate;
 	}
-	public void setDeliveryDate(float deliveryDate) {
+	public void setDeliveryDate(int deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 	
