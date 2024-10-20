@@ -1,0 +1,224 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class Customer{
+
+private int id;
+	private String name;
+	private String address;
+	private int phoneNumber;
+	private String subscriptionStatus;
+	private boolean pauseActive;
+
+
+
+    public Customer(String custName, String custAddress, int custPhone, String subscriptionStatus, boolean pauseActive)
+
+
+	string getName()
+	public String getName()
+	public int getId()
+    public void setId(int id)
+    public int getPhoneNumber()
+    public int setPhoneNumber()
+    public String getSubscriptionStatus()
+    public String setSubscriptionStatus()
+    public boolean isPauseActive()
+    public boolean setPauseActive()
+    public static void validateName()
+    public static void validateAddress()
+    public static void validatePhoneNumber()
+}
+  class Order{
+
+     Customer --|> Order
+
+      private int customerId;
+      private long customerPhoneNumber;
+      private double publicationPrice;
+      private boolean canSendOrder;
+
+
+     public Order(int  customerId, long customerPhoneNumber, double publicationPrice, boolean canSendOrder )
+
+
+
+      public int getCustomerId()
+
+
+
+      public void setCustomerId(int customerId)
+
+
+
+      public long getCustomerPhoneNumber()
+
+
+
+      public void setCustomerPhoneNumber(long customerPhoneNumber)
+
+
+
+      public double getPublicationPrice()
+
+
+      public void setPublicationPrice(double publicationPrice)
+
+
+
+      public boolean isCanSendOrder()
+
+
+
+      public void setCanSendOrder(boolean canSendOrder)
+
+
+
+
+    }
+
+ class Deliveries
+{
+	private int driverID;
+	private int orderId;
+	private int deliveryDate;
+	private String publicationID;
+	private String customerName;
+	private String deliveryAddress;
+	private String activeDays;
+	private boolean deliveryStatus;
+	private boolean deliveriesPaused;
+
+	public Deliveries(int driverID, int orderId, int deliveryDate, String publicationID, String customerName, String deliveryAddress,
+			String activeDays, boolean deliveryStatus, boolean deliveriesPaused)
+
+
+
+	public int getDriverID()
+
+
+	public void setDriverID(int driverID)
+
+
+
+	public int getOrderId()
+
+
+	public void setOrderId(int orderId)
+
+
+
+	public float getDeliveryDate()
+
+
+	public void setDeliveryDate(int deliveryDate)
+
+
+
+	public String getPublicationID()
+
+
+	public void setPublicationID(String publicationID)
+
+
+
+	public String getCustomerName()
+
+	public void setCustomerName(String customerName)
+
+
+
+	public String getDeliveryAddress()
+
+
+	public void setDeliveryAddress(String deliveryAddress)
+
+
+
+	public String getActiveDays()
+
+
+	public void setActiveDays(String activeDays)
+
+
+
+	public boolean isDeliveryStatus()
+
+
+	public void setDeliveryStatus(boolean deliveryStatus)
+
+
+	public boolean isDeliveriesPaused()
+
+
+	public void setDeliveriesPaused(boolean deliveriesPaused)
+
+
+
+}
+class invoice {
+
+    private int customerID;
+	private int quantity;
+	private int invoiceDate;
+	private double invoiceAmount;
+	private double pricePerItem;
+	private String publicationName;
+
+
+
+	public Invoice(int customerID, int quantity, int invoiceDate, double invoiceAmount, double pricePerItem, String publicationName)
+
+
+	public int getCustomerID()
+
+
+    	public void setCustomerID(int customerID)
+
+
+
+    	public int getQuantity()
+
+
+    	public void setQuantity(int quantity)
+
+
+
+    	public float getInvoiceDate()
+
+
+    	public void setInvoiceDate(int invoiceDate)
+
+
+    	public double getInvoiceAmount()
+
+
+    	public void setInvoiceAmount(double invoiceAmount)
+
+
+
+    	public double getPricePerItem()
+
+
+    	public void setPricePerItem(double pricePerItem)
+
+
+
+    	public String getPublicationName()
+
+
+    	public void setPublicationName(String publicationName)
+
+
+
+
+
+}
+
+
+
+
+
+
+
+@enduml
