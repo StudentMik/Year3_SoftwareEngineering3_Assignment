@@ -1,7 +1,7 @@
 package Newsagent; 
 import java.sql.*;
 import java.util.Scanner;
-
+ 
 public class Invoice
 {
 	private int orderId;
