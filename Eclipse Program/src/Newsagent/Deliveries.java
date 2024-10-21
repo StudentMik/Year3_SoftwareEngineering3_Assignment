@@ -22,54 +22,68 @@ public class Deliveries
 		this.publicationName = publicationName;
 	}
 	
-	public int getDriverID() {
+	public int getDriverID() 
+	{
 		return driverID;
 	}
-	public void setDriverID(int driverID) {
+	public void setDriverID(int driverID) 
+	{
 		this.driverID = driverID;
 	}
 
-	public int getDeliveryDArea() {
+	public int getDeliveryDArea() 
+	{
 		return deliveryDArea;
 	}
-	public void setDeliveryDArea(int deliveryDArea) {
+	public void setDeliveryDArea(int deliveryDArea) 
+	{
 		this.deliveryDArea = deliveryDArea;
 	}
 
-	public float getDeliveryDate() {
+	public float getDeliveryDate() 
+	{
 		return deliveryDate;
 	}
-	public void setDeliveryDate(int deliveryDate) {
+	public void setDeliveryDate(int deliveryDate) 
+	{
 		this.deliveryDate = deliveryDate;
 	}
 	
-	public int getCustomerId() {
+	public int getCustomerId() 
+	{
 		return customerId;
 	}
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(int customerId) 
+	{
 		this.customerId = customerId;
 	}
-	public int getOrderId() {
+	public int getOrderId() 
+	{
 		return orderId;
 	}
-	public void setOrderId(int orderId) {
+	public void setOrderId(int orderId) 
+	{
 		this.orderId = orderId;
 	}
 
-	public String getDeliveryAddress() {
+	public String getDeliveryAddress() 
+	{
 		return deliveryAddress;
 	}
-	public void setDeliveryAddress(String deliveryAddress) {
+	public void setDeliveryAddress(String deliveryAddress) 
+	{
 		this.deliveryAddress = deliveryAddress;
 	}
 	
 	public String getPublicationName() {
 		return publicationName;
 	}
-	public void setPublicationName(String publicationName) {
+	public void setPublicationName(String publicationName) 
+	{
 		this.publicationName = publicationName;
 	}
-    
+
+	//
 	static Connection con = null;
     	static Statement stmt = null;
 
