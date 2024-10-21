@@ -1,5 +1,8 @@
 package Newsagent;
 
+import java.util.*;
+//import java.sql.*;
+
 public class Customer
 {
 	private int id;
