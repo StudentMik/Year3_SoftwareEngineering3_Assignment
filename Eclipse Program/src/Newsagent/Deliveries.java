@@ -6,15 +6,17 @@ public class Deliveries
 {
 	private int driverID;
 	private int deliveryDArea; //1-24
-	private float deliveryDDate;
+	private float deliveryDate;
+	private int customerId;
 	private int orderId;
 	private String deliveryAddress;
 	private String publicationName;  //publications delivered
 	
-	public Deliveries(int driverID, int deliveryDArea, float deliveryDDate, int orderId, String deliveryAddress, String publicationName) {
+	public Deliveries(int driverID, int deliveryDArea, float deliveryDate, int customerId, int orderId, String deliveryAddress, String publicationName) {
 		this.driverID = driverID;
 		this.deliveryDArea = deliveryDArea;
-		this.deliveryDDate = deliveryDDate;
+		this.deliveryDate = deliveryDate;
+		this.customerId = customerId;
 		this.orderId = orderId;
 		this.deliveryAddress = deliveryAddress;
 		this.publicationName = publicationName;
@@ -34,13 +36,19 @@ public class Deliveries
 		this.deliveryDArea = deliveryDArea;
 	}
 
-	public float getDeliveryDDate() {
-		return deliveryDDate;
+	public float getDeliveryDate() {
+		return deliveryDate;
 	}
-	public void setDeliveryDDate(int deliveryDDate) {
-		this.deliveryDDate = deliveryDDate;
+	public void setDeliveryDate(int deliveryDate) {
+		this.deliveryDate = deliveryDate;
 	}
-
+	
+	public int getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
 	public int getOrderId() {
 		return orderId;
 	}
