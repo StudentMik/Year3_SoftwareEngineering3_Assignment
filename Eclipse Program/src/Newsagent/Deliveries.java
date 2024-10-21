@@ -3,26 +3,19 @@ package Newsagent;
 public class Deliveries
 {
 	private int driverID;
+	private int deliveryDArea; //1-24
+	private float deliveryDDate;
 	private int orderId;
-	private int deliveryDate;
-	private String publicationID;  //publications delivered
-	private String customerName; 
-	private String deliveryAddress; //delivery area
-	private String activeDays;  //delivery Date
-	private boolean deliveryStatus;
-	private boolean deliveriesPaused;
+	private String deliveryAddress;
+	private String publicationId;  //publications delivered
 	
-	public Deliveries(int driverID, int orderId, int deliveryDate, String publicationID, String customerName, String deliveryAddress,
-			String activeDays, boolean deliveryStatus, boolean deliveriesPaused) {
+	public Deliveries(int driverID, int deliveryDArea, float DeliveryDDate, int orderId, String deliveryAddress, String publicationId) {
 		this.driverID = driverID;
+		this.deliveryDArea = deliveryDArea;
+		this.deliveryDDate = deliveryDDate;
 		this.orderId = orderId;
-		this.deliveryDate = deliveryDate;
-		this.publicationID = publicationID;
-		this.customerName = customerName;
 		this.deliveryAddress = deliveryAddress;
-		this.activeDays = activeDays;
-		this.deliveryStatus = deliveryStatus;
-		this.deliveriesPaused = deliveriesPaused;
+		this.publicationID = publicationID;
 	}
 	
 	public int getDriverID() {
@@ -32,32 +25,25 @@ public class Deliveries
 		this.driverID = driverID;
 	}
 
+	public int getDeliveryDArea() {
+		return deliveryDArea;
+	}
+	public void setDeliveryDArea(int deliveryDArea) {
+		this.deliveryDArea = deliveryDArea;
+	}
+
+	public float getDeliveryDDate() {
+		return deliveryDDate;
+	}
+	public void setDeliveryDDate(int deliveryDDate) {
+		this.deliveryDDate = deliveryDDate;
+	}
+
 	public int getOrderId() {
 		return orderId;
 	}
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
-	}
-
-	public float getDeliveryDate() {
-		return deliveryDate;
-	}
-	public void setDeliveryDate(int deliveryDate) {
-		this.deliveryDate = deliveryDate;
-	}
-	
-	public String getPublicationID() {
-		return publicationID;
-	}
-	public void setPublicationID(String publicationID) {
-		this.publicationID = publicationID;
-	}
-
-	public String getCustomerName() {
-		return customerName;
-	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
 	}
 
 	public String getDeliveryAddress() {
@@ -66,25 +52,12 @@ public class Deliveries
 	public void setDeliveryAddress(String deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
 	}
-
-	public String getActiveDays() {
-		return activeDays;
+	
+	public String getPublicationId() {
+		return publicationId;
 	}
-	public void setActiveDays(String activeDays) {
-		this.activeDays = activeDays;
-	}
-
-	public boolean isDeliveryStatus() {
-		return deliveryStatus;
-	}
-	public void setDeliveryStatus(boolean deliveryStatus) {
-		this.deliveryStatus = deliveryStatus;
-	}
-	public boolean isDeliveriesPaused() {
-		return deliveriesPaused;
-	}
-	public void setDeliveriesPaused(boolean deliveriesPaused) {
-		this.deliveriesPaused = deliveriesPaused;
+	public void setPublicationId(String publicationId) {
+		this.publicationId = publicationId;
 	}
 
 	public static void main(String args[]) {		
