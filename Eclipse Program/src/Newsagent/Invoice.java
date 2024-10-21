@@ -140,7 +140,7 @@ public class Invoice
         try 
 		{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/News_Agent?useTimezone=true&serverTimezone=UTC";
+            String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC";
             con = DriverManager.getConnection(url, "root", "root");
             stmt = con.createStatement();
         } 
