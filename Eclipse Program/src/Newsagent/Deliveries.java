@@ -21,7 +21,7 @@ public class Deliveries
 		this.deliveryAddress = deliveryAddress;
 		this.publicationName = publicationName;
 	}
-	
+
 	public int getDriverID() 
 	{
 		return driverID;
