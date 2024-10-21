@@ -14,10 +14,6 @@ public class Invoice
 	
 	public Invoice(int orderId, int quantity, String invoiceDate, double invoiceTotal, double pricePerItem, String publicationName) throws InvoiceExceptionHandler 
 	{
-			validateId(orderId);
-			validateinvoiceDate(invoiceDate);
-			validateinvoiceTotal(invoiceTotal);
-			
 		this.orderId = orderId;
 		this.quantity = quantity;
 		this.invoiceDate = invoiceDate;
