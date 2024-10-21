@@ -23,51 +23,63 @@ public class Customer
 		this.pauseActive = pauseActive;
 	}
 
-	public int getId() {
+	public int getId()
+	{
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(int id)
+	{
 		this.id = id;
 	}
 
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
-	public String getAddress() {
+	public String getAddress()
+	{
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(String address)
+	{
 		this.address = address;
 	}
 
-	public int getPhoneNumber() {
+	public int getPhoneNumber()
+	{
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(int phoneNumber)
+	{
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getSubscriptionStatus() {
+	public String getSubscriptionStatus()
+	{
 		return subscriptionStatus;
 	}
 
-	public void setSubscriptionStatus(String subscriptionStatus) {
+	public void setSubscriptionStatus(String subscriptionStatus)
+	{
 		this.subscriptionStatus = subscriptionStatus;
 	}
 
-	public boolean isPauseActive() {
+	public boolean isPauseActive()
+	{
 		return pauseActive;
 	}
 
-	public void setPauseActive(boolean pauseActive) {
+	public void setPauseActive(boolean pauseActive)
+	{
 		this.pauseActive = pauseActive;
 	}
 	
