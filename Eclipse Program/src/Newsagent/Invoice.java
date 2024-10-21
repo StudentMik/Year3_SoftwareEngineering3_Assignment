@@ -5,9 +5,9 @@ public class Invoice
 	private int customerID;
 	private int quantity;
 	private int invoiceDate;
-	private double invoiceAmount; //total cost
-	private double pricePerItem;  // or publication price
-	private String publicationName; //or id
+	private double invoiceAmount; 
+	private double pricePerItem; 
+	private String publicationName; 
 	
 	public Invoice(int customerID, int quantity, int invoiceDate, double invoiceAmount, double pricePerItem, String publicationName) {
 		this.customerID = customerID;
