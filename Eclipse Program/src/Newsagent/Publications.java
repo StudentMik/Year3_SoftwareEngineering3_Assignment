@@ -10,7 +10,8 @@ public class Publications
 	private double publicationPrice;
 	private String schedule;
 	
-	public Publications(int publicationNo, String publicationName, double publicationStock, double publicationPrice, String schedule) {
+	public Publications(int publicationNo, String publicationName, double publicationStock, double publicationPrice, String schedule) 
+	{
 		this.publicationNo = publicationNo;
 		this.publicationName = publicationName;
 		this.publicationStock = publicationStock;
@@ -18,38 +19,48 @@ public class Publications
 		this.schedule = schedule;
 	}
 
-	public int getPublicationNo() {
+	public int getPublicationNo() 
+	{
 		return publicationNo;
 	}
-	public void setPublicationNo(int publicationNo) {
+	public void setPublicationNo(int publicationNo) 
+	{
 		this.publicationNo = publicationNo;
 	}
 
-	public String getPublicationName() {
+	public String getPublicationName() 
+	{
 		return publicationName;
 	}
-	public void setPublicationName(String publicationName) {
+	public void setPublicationName(String publicationName) 
+	{
 		this.publicationName = publicationName;
 	}
 
-	public double getPublicationStock() {
+	public double getPublicationStock() 
+	{
 		return publicationStock;
 	}
-	public void setPublicationStock(double publicationStock) {
+	public void setPublicationStock(double publicationStock) 
+	{
 		this.publicationStock = publicationStock;
 	}
 
-	public double getPublicationPrice() {
+	public double getPublicationPrice() 
+	{
 		return publicationPrice;
 	}
-	public void setPublicationPrice(double publicationPrice) {
+	public void setPublicationPrice(double publicationPrice) 
+	{
 		this.publicationPrice = publicationPrice;
 	}
 
-	public String getSchedule() {
+	public String getSchedule() 
+	{
 		return schedule;
 	}
-	public void setSchedule(String schedule) {
+	public void setSchedule(String schedule) 
+	{
 		this.schedule = schedule;
 	}
 
@@ -57,7 +68,8 @@ public class Publications
     	static Statement stmt = null;
     	static ResultSet rs = null;
 
-    	public static void main(String[] args) {
+    	public static void main(String[] args) 
+	{
         	Scanner in = new Scanner(System.in);
         	init_db(); // Open the connection to the database
         	try {
@@ -83,33 +95,48 @@ public class Publications
             	int rows = pstmt.executeUpdate();
 
             	// Check if the insert was successful
-            	if (rows > 0) {
+            	if (rows > 0) 
+		{
                 	System.out.println("Publication added successfully!");
-            	} else {
+            	} 
+		else 
+		{
                 	System.out.println("Failed to add publication.");
             	}
 
-        	} catch (SQLException sqle) {
+        	} 
+		catch (SQLException sqle) 
+			{
             	System.out.println("Error: " + sqle.getMessage());
-        	} finally {
+        	} 
+		finally 
+			{
             	// Close the database connection
-            	try {
-                	if (con != null) {
+            	try 
+			{
+                	if (con != null) 
+			{
                     	con.close();
                 	}
-            	} catch (SQLException sqle) {
+            	} 
+		catch (SQLException sqle) 
+			{
                 	System.out.println("Error: failed to close the database");
             	}
         	}
     	}
 
-    	public static void init_db() {
-        	try {
+    	public static void init_db() 
+	{
+        	try 
+			{
             	Class.forName("com.mysql.cj.jdbc.Driver");
             	String url = "jdbc:mysql://localhost:3306/News_Agent?useTimezone=true&serverTimezone=UTC"; // Updated database name
             	con = DriverManager.getConnection(url, "root", "root");
             	stmt = con.createStatement();
-        	} catch (Exception e) {
+        	} 
+		catch (Exception e) 
+			{
             	System.out.println("Error: Failed to connect to database\n" + e.getMessage());
         	}
     	}
