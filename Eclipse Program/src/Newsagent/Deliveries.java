@@ -9,7 +9,7 @@ public class Deliveries
 	private String deliveryAddress;
 	private String publicationId;  //publications delivered
 	
-	public Deliveries(int driverID, int deliveryDArea, float DeliveryDDate, int orderId, String deliveryAddress, String publicationId) {
+	public Deliveries(int driverID, int deliveryDArea, float deliveryDDate, int orderId, String deliveryAddress, String publicationId) {
 		this.driverID = driverID;
 		this.deliveryDArea = deliveryDArea;
 		this.deliveryDDate = deliveryDDate;
