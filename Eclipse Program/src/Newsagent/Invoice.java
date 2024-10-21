@@ -11,7 +11,8 @@ public class Invoice
 	private double pricePerItem; 
 	private String publicationName; 
 	
-	public Invoice(int orderId, int quantity, int invoiceDate, double invoiceTotal, double pricePerItem, String publicationName) {
+	public Invoice(int orderId, int quantity, int invoiceDate, double invoiceTotal, double pricePerItem, String publicationName) 
+	{
 		this.orderId = orderId;
 		this.quantity = quantity;
 		this.invoiceDate = invoiceDate;
@@ -20,51 +21,64 @@ public class Invoice
 		this.publicationName = publicationName;
 	}
 
-	public int getOrderId() {
+	public int getOrderId() 
+	{
 		return orderId;
 	}
-	public void setOrderId(int orderId) {
+	public void setOrderId(int orderId) 
+	{
 		this.orderId = orderId;
 	}
 
-	public int getQuantity() {
+	public int getQuantity() 
+	{
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(int quantity) 
+	{
 		this.quantity = quantity;
 	}
 
-	public float getInvoiceDate() {
+	public float getInvoiceDate() 
+	{
 		return invoiceDate;
 	}
-	public void setInvoiceDate(int invoiceDate) {
+	public void setInvoiceDate(int invoiceDate) 
+	{
 		this.invoiceDate = invoiceDate;
 	}
-	public double getInvoiceTotal() {
+	public double getInvoiceTotal() 
+	{
 		return invoiceTotal;
 	}
-	public void setInvoiceTotal(double invoiceTotal) {
+	public void setInvoiceTotal(double invoiceTotal) 
+	{
 		this.invoiceTotal = invoiceTotal;
 	}
 
-	public double getPricePerItem() {
+	public double getPricePerItem() 
+	{
 		return pricePerItem;
 	}
-	public void setPricePerItem(double pricePerItem) {
+	public void setPricePerItem(double pricePerItem) 
+	{
 		this.pricePerItem = pricePerItem;
 	}
 
-	public String getPublicationName() {
+	public String getPublicationName() 
+	{
 		return publicationName;
 	}
-	public void setPublicationName(String publicationName) {
+	public void setPublicationName(String publicationName) 
+	{
 		this.publicationName = publicationName;
 	}
 	
 	static Connection con = null;
     	static Statement stmt = null;
 
-   	public static void main(String[] args) {
+   	public static void main(String[] args) 
+	{
         	Scanner in = new Scanner(System.in);
         	init_db(); // Open the connection to the database
         	try {
@@ -90,33 +104,48 @@ public class Invoice
             	int rows = pstmt.executeUpdate();
 
             	// Check if the insert was successful
-            	if (rows > 0) {
+            	if (rows > 0) 
+		{
                 	System.out.println("Invoice added successfully!");
-            	} else {
+            	} 
+		else 
+		{
                 	System.out.println("Failed to add invoice.");
             	}
 
-        	} catch (SQLException sqle) {
+        	} 
+		catch (SQLException sqle) 
+			{
             	System.out.println("Error: " + sqle.getMessage());
-        	} finally {
+        	} 
+		finally 
+			{
             	// Close the database connection
-            	try {
-                	if (con != null) {
+            	try 
+			{
+                	if (con != null) 
+			{
                     	con.close();
                 	}
-            	} catch (SQLException sqle) {
+            	} 
+		catch (SQLException sqle) 
+			{
                 	System.out.println("Error: failed to close the database");
             	}
         }
     }
 
-    public static void init_db() {
-        try {
+    public static void init_db() 
+	{
+        try 
+		{
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/News_Agent?useTimezone=true&serverTimezone=UTC";
             con = DriverManager.getConnection(url, "root", "root");
             stmt = con.createStatement();
-        } catch (Exception e) {
+        } 
+	catch (Exception e) 
+		{
             System.out.println("Error: Failed to connect to database\n" + e.getMessage());
         }
     }
