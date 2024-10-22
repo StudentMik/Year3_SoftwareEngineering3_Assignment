@@ -76,34 +76,42 @@ public class Invoice
 	}
 	
 	
-	public static void validateId(int orderId) throws InvoiceExceptionHandler {
+	public static void validateordId(int orderId) throws InvoiceExceptionHandler 
+	{
+		//String ordID = String.valueOf(orderId);
 	    if(orderId <= 0) 
 	    {
 	        throw new InvoiceExceptionHandler("OrderId not specified or invalid");
 	    }
-	    if(orderId > 200) 
+	    if(orderId > 100) 
 	    {
-	        throw new InvoiceExceptionHandler("OrderId exceeds Maximum Length");
+	        throw new InvoiceExceptionHandler("OrderId exceeds Maximum");
 	    }
 	}
-	public static void validateinvoiceDate(String invoiceDate) throws InvoiceExceptionHandler {
-	    if (invoiceDate == null || invoiceDate.isEmpty()) {
-	        throw new InvoiceExceptionHandler("Order date not specified or invalid");
+	
+	public static void validateinvoiceDate(String invoiceDate) throws InvoiceExceptionHandler 
+	{
+	    if (invoiceDate == null || invoiceDate.isEmpty()) 
+	    {
+	        throw new InvoiceExceptionHandler("Invoice date not specified or invalid");
 	    }
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 	    dateFormat.setLenient(false); 
-	    try {
+	    try 
+	    {
 	        dateFormat.parse(invoiceDate);
 	    } catch (ParseException e) {
-	        throw new InvoiceExceptionHandler("Order date is invalid, expected format is yyyy-mm-dd");
+	        throw new InvoiceExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
 	    }
 	}
 	public static void validateinvoiceTotal(double invoiceTotal) throws InvoiceExceptionHandler 
 	{
-		if (invoiceTotal < 0) {
+		if (invoiceTotal < 0) 
+		{
 	        throw new InvoiceExceptionHandler("Total cannot be negative");
 	    }
 	}
+	
 	//
 	static Connection con = null;
     static Statement stmt = null;
@@ -119,7 +127,7 @@ public class Invoice
             	// Get invoice details from the user
             	System.out.println("Please Enter the Order ID:");
             	int orderId = in.nextInt();
-            	validateId(orderId);
+            	validateordId(orderId);
             	in.nextLine(); // Consume the newline left-over
             	System.out.println("Please Enter the Invoice Date (YYYY-MM-DD):");
             	String invoiceDate = in.nextLine();
