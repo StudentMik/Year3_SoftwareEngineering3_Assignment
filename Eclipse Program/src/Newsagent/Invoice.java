@@ -6,20 +6,20 @@ import java.text.*;
 public class Invoice
 {
 	private int orderId;
-	private int quantity;
+	//private int quantity;
 	private String invoiceDate;
 	private double invoiceTotal; 
-	private double pricePerItem; 
-	private String publicationName; 
+	//private double pricePerItem; 
+	//private String publicationName; 
 	
-	public Invoice(int orderId, int quantity, String invoiceDate, double invoiceTotal, double pricePerItem, String publicationName) throws InvoiceExceptionHandler 
+	public Invoice(int orderId, String invoiceDate, double invoiceTotal) throws InvoiceExceptionHandler 
 	{
 		this.orderId = orderId;
-		this.quantity = quantity;
+		//this.quantity = quantity;
 		this.invoiceDate = invoiceDate;
 		this.invoiceTotal = invoiceTotal;
-		this.pricePerItem = pricePerItem;
-		this.publicationName = publicationName;
+		//this.pricePerItem = pricePerItem;
+		//this.publicationName = publicationName;
 	}
 
 	public int getOrderId() 
@@ -31,14 +31,14 @@ public class Invoice
 		this.orderId = orderId;
 	}
 
-	public int getQuantity() 
+	/*public int getQuantity() 
 	{
 		return quantity;
 	}
 	public void setQuantity(int quantity) 
 	{
 		this.quantity = quantity;
-	}
+	}*/
 
 	public String getInvoiceDate() 
 	{
@@ -48,6 +48,7 @@ public class Invoice
 	{
 		this.invoiceDate = invoiceDate;
 	}
+	
 	public double getInvoiceTotal() 
 	{
 		return invoiceTotal;
@@ -57,7 +58,7 @@ public class Invoice
 		this.invoiceTotal = invoiceTotal;
 	}
 
-	public double getPricePerItem() 
+	/*public double getPricePerItem() 
 	{
 		return pricePerItem;
 	}
@@ -73,7 +74,7 @@ public class Invoice
 	public void setPublicationName(String publicationName) 
 	{
 		this.publicationName = publicationName;
-	}
+	}*/
 	
 	
 	public static void validateordId(int orderId) throws InvoiceExceptionHandler 
@@ -112,7 +113,8 @@ public class Invoice
 	    }
 	}
 	
-	//
+	
+	//Connect to Database
 	static Connection con = null;
     static Statement stmt = null;
 
@@ -183,7 +185,7 @@ public class Invoice
 		{
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "root", "Root");
+            con = DriverManager.getConnection(url, "root", "root");
             stmt = con.createStatement();
         } 
         catch (Exception e) 
