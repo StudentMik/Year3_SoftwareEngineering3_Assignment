@@ -64,11 +64,45 @@ public class Publications
 		this.schedule = schedule;
 	}
 
+	public static void validatepubliName(String publicationName) throws PublicationExceptionHandler
+	{
+		if (publicationName.isBlank() || publicationName.isEmpty())
+		{
+			throw new PublicationExceptionHandler("Publication Name not specified or invalid");
+		}
+		else if (publicationName.length() < 5)
+		{
+			throw new PublicationExceptionHandler("Publication Name does not meet minimum length requirements");
+		}
+		else if (publicationName.length() > 50)
+		{
+			throw new PublicationExceptionHandler("Publication Name does not exceeds maximum length requirements");
+		}
+	}
+	public static void validatepubliPrice(double publicationPrice) throws PublicationExceptionHandler 
+	{
+		if (publicationPrice < 0) 
+		{
+	        throw new PublicationExceptionHandler("Price cannot be negative");
+	    }
+	}
+	public static void validateschedule(String schedule) throws PublicationExceptionHandler
+	{
+		if (!("Daily".equals(schedule) || "Weekly".equals(schedule) || "Monthly".equals(schedule))) 
+		{
+	        throw new PublicationExceptionHandler("Invalid schedule input. Daily, Weekly, or Monthly expected");
+	    }
+		/*if (schedule != "Daily" || schedule != "Weekly" || schedule != "Monthly")
+		{
+			throw new PublicationExceptionHandler("Invalid schedule input. Daily, Weekly or Monthly expected");
+		}*/
+	}
+	//
 	static Connection con = null;
     	static Statement stmt = null;
     	static ResultSet rs = null;
 
-    	public static void main(String[] args) 
+    	public static void main(String[] args) throws PublicationExceptionHandler
 	{
         	Scanner in = new Scanner(System.in);
         	init_db(); // Open the connection to the database
@@ -79,11 +113,14 @@ public class Publications
             	// Get publication details from the user
             	System.out.println("Please Enter the Publication Name:");
             	String publicationName = in.nextLine();  // Use nextLine() to capture full name
+            	validatepubliName(publicationName);
             	System.out.println("Please Enter the Publication Price:");
             	double publicationPrice = in.nextDouble();
+            	validatepubliPrice(publicationPrice);
             	in.nextLine(); // Consume the newline left-over
             	System.out.println("Please Enter the Schedule:");
             	String schedule = in.nextLine();
+            	validateschedule(schedule);
 
             	// Prepare the statement
             	PreparedStatement pstmt = con.prepareStatement(str);
@@ -132,7 +169,7 @@ public class Publications
 			{
             	Class.forName("com.mysql.cj.jdbc.Driver");
             	String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC"; // Updated database name
-            	con = DriverManager.getConnection(url, "root", "root");
+            	con = DriverManager.getConnection(url, "root", "Root");
             	stmt = con.createStatement();
         	} 
 		catch (Exception e) 
