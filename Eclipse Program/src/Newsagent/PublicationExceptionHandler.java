@@ -1,7 +1,9 @@
 package Newsagent;
 
-public class PublicationExceptionHandler extends Exception {
-    public PublicationExceptionHandler(String message) {
+public class PublicationExceptionHandler extends Exception 
+{
+    public PublicationExceptionHandler(String message) 
+    {
         super(message);
     }
 } 
