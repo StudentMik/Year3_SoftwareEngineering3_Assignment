@@ -5,25 +5,25 @@ import java.util.Scanner;
 
 public class Deliveries
 {
-	private int driverID;
-	private int deliveryDArea; //1-24
+	//private int driverID;
+	//private int deliveryDArea; //1-24
 	private float deliveryDate;
 	private int customerId;
 	private int orderId;
-	private String deliveryAddress;
+	//private String deliveryAddress;
 	private String publicationName;  //publications delivered
 	
 	public Deliveries(int driverID, int deliveryDArea, float deliveryDate, int customerId, int orderId, String deliveryAddress, String publicationName) {
-		this.driverID = driverID;
-		this.deliveryDArea = deliveryDArea;
+		//this.driverID = driverID;
+		//this.deliveryDArea = deliveryDArea;
 		this.deliveryDate = deliveryDate;
 		this.customerId = customerId;
 		this.orderId = orderId;
-		this.deliveryAddress = deliveryAddress;
+		//this.deliveryAddress = deliveryAddress;
 		this.publicationName = publicationName;
 	}
 
-	public int getDriverID() 
+	/*public int getDriverID() 
 	{
 		return driverID;
 	}
@@ -39,7 +39,7 @@ public class Deliveries
 	public void setDeliveryDArea(int deliveryDArea) 
 	{
 		this.deliveryDArea = deliveryDArea;
-	}
+	}*/
 
 	public float getDeliveryDate() 
 	{
@@ -67,14 +67,14 @@ public class Deliveries
 		this.orderId = orderId;
 	}
 
-	public String getDeliveryAddress() 
+	/*public String getDeliveryAddress() 
 	{
 		return deliveryAddress;
 	}
 	public void setDeliveryAddress(String deliveryAddress) 
 	{
 		this.deliveryAddress = deliveryAddress;
-	}
+	}*/
 	
 	public String getPublicationName() {
 		return publicationName;
@@ -138,12 +138,13 @@ public class Deliveries
 	    }
 	}
 	
-	//
+	
+	//Connect to Database
 		static Connection con = null;
     	static Statement stmt = null;
 
     	public static void main(String[] args) throws DeliveryExceptionHandler
-	{
+    	{
         	Scanner in = new Scanner(System.in);
         	init_db(); // Open the connection to the database
         	try 
@@ -178,47 +179,47 @@ public class Deliveries
 
             	// Check if the insert was successful
             	if (rows > 0) 
-		{
+            	{
                 	System.out.println("Delivery docket added successfully!");
             	} 
-		else
-		{
+            	else
+            	{
                 	System.out.println("Failed to add delivery docket.");
             	}
 
         	} 
-		catch (SQLException sqle) 
+        	catch (SQLException sqle) 
 			{
             	System.out.println("Error: " + sqle.getMessage());
         	} 
-		finally 
+        	finally 
 			{
             	// Close the database connection
             	try 
-			{
+            	{
                 	if (con != null) 
-			{
+                	{
                     	con.close();
                 	}
             	} 
-		catch (SQLException sqle) 
-			{
+            	catch (SQLException sqle) 
+            	{
                 	System.out.println("Error: failed to close the database");
             	}
         	}
     	}
 
     	public static void init_db() 
-	{
+    	{
         	try 
-		{
+        	{
             	Class.forName("com.mysql.cj.jdbc.Driver");
             	String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC";
-            	con = DriverManager.getConnection(url, "root", "Root");
+            	con = DriverManager.getConnection(url, "root", "root");
             	stmt = con.createStatement();
         	} 
-		catch (Exception e) 
-		{
+        	catch (Exception e) 
+        	{
             	System.out.println("Error: Failed to connect to database\n" + e.getMessage());
         	}
     	}
