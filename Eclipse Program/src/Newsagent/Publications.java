@@ -4,30 +4,20 @@ import java.util.Scanner;
  
 public class Publications
 {
-	private int publicationNo;
 	private String publicationName;
-	private double publicationStock;
+	//private double publicationStock;
 	private double publicationPrice;
 	private String schedule;
 	
-	public Publications(int publicationNo, String publicationName, double publicationStock, double publicationPrice, String schedule) 
+	public Publications(String publicationName, double publicationPrice, String schedule) 
 	{
-		this.publicationNo = publicationNo;
 		this.publicationName = publicationName;
-		this.publicationStock = publicationStock;
+		//this.publicationStock = publicationStock;
 		this.publicationPrice = publicationPrice;
 		this.schedule = schedule;
 	}
 
-	public int getPublicationNo() 
-	{
-		return publicationNo;
-	}
-	public void setPublicationNo(int publicationNo) 
-	{
-		this.publicationNo = publicationNo;
-	}
-
+	
 	public String getPublicationName() 
 	{
 		return publicationName;
@@ -37,14 +27,14 @@ public class Publications
 		this.publicationName = publicationName;
 	}
 
-	public double getPublicationStock() 
+	/*public double getPublicationStock() 
 	{
 		return publicationStock;
 	}
 	public void setPublicationStock(double publicationStock) 
 	{
 		this.publicationStock = publicationStock;
-	}
+	}*/
 
 	public double getPublicationPrice() 
 	{
@@ -97,17 +87,20 @@ public class Publications
 			throw new PublicationExceptionHandler("Invalid schedule input. Daily, Weekly or Monthly expected");
 		}*/
 	}
-	//
-	static Connection con = null;
+	
+	
+	//Connect to Database
+		static Connection con = null;
     	static Statement stmt = null;
     	static ResultSet rs = null;
 
     	public static void main(String[] args) throws PublicationExceptionHandler
-	{
-        	Scanner in = new Scanner(System.in);
+    	{
+    		Scanner in = new Scanner(System.in);
         	init_db(); // Open the connection to the database
-        	try {
-            	// SQL insert statement for the publication table
+        	try 
+        	{
+        		// SQL insert statement for the publication table
             	String str = "INSERT INTO publication (PublicationName, PublicationPrice, Schedule) VALUES (?, ?, ?)";
 
             	// Get publication details from the user
@@ -133,46 +126,46 @@ public class Publications
 
             	// Check if the insert was successful
             	if (rows > 0) 
-		{
+            	{
                 	System.out.println("Publication added successfully!");
             	} 
-		else 
-		{
+            	else 
+            	{
                 	System.out.println("Failed to add publication.");
             	}
 
         	} 
-		catch (SQLException sqle) 
+        	catch (SQLException sqle) 
 			{
             	System.out.println("Error: " + sqle.getMessage());
         	} 
-		finally 
+        	finally 
 			{
             	// Close the database connection
-            	try 
-			{
-                	if (con != null) 
-			{
-                    	con.close();
-                	}
-            	} 
-		catch (SQLException sqle) 
-			{
-                	System.out.println("Error: failed to close the database");
-            	}
+        		try 
+        		{
+        			if (con != null) 
+        			{
+        				con.close();
+        			}
+        		} 
+        		catch (SQLException sqle) 
+        		{
+        			System.out.println("Error: failed to close the database");
+        		}
         	}
     	}
 
     	public static void init_db() 
-	{
-        	try 
+    	{
+    		try 
 			{
             	Class.forName("com.mysql.cj.jdbc.Driver");
             	String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC"; // Updated database name
-            	con = DriverManager.getConnection(url, "root", "Root");
+            	con = DriverManager.getConnection(url, "root", "root");
             	stmt = con.createStatement();
         	} 
-		catch (Exception e) 
+    		catch (Exception e) 
 			{
             	System.out.println("Error: Failed to connect to database\n" + e.getMessage());
         	}
