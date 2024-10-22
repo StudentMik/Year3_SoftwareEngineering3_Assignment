@@ -1,5 +1,6 @@
 package Newsagent;
 import java.sql.*;
+import java.text.*;
 import java.util.Scanner;
 
 public class Deliveries
@@ -83,11 +84,65 @@ public class Deliveries
 		this.publicationName = publicationName;
 	}
 
+	public static void validatecustId(int customerId) throws DeliveryExceptionHandler 
+	{
+	    if(customerId <= 0) 
+	    {
+	        throw new DeliveryExceptionHandler("CustomerId not specified or invalid");
+	    }
+	    if(customerId > 100) 
+	    {
+	        throw new DeliveryExceptionHandler("CustomerId exceeds Maximum");
+	    }
+	}
+	public static void validateordId(int orderId) throws DeliveryExceptionHandler 
+	{
+	    if(orderId <= 0) 
+	    {
+	        throw new DeliveryExceptionHandler("OrderId not specified or invalid");
+	    }
+	    if(orderId > 100) 
+	    {
+	        throw new DeliveryExceptionHandler("OrderId exceeds Maximum");
+	    }
+	}
+	public static void validatepubliName(String publicationName) throws DeliveryExceptionHandler
+	{
+		if (publicationName.isBlank() || publicationName.isEmpty())
+		{
+			throw new DeliveryExceptionHandler("Publication Name not specified or invalid");
+		}
+		else if (publicationName.length() < 5)
+		{
+			throw new DeliveryExceptionHandler("Publication Name does not meet minimum length requirements");
+		}
+		else if (publicationName.length() > 50)
+		{
+			throw new DeliveryExceptionHandler("Publication Name does not exceeds maximum length requirements");
+		}
+		
+	}
+	public static void validatedeliveryDate(String deliveryDate) throws DeliveryExceptionHandler 
+	{
+	    if (deliveryDate == null || deliveryDate.isEmpty()) 
+	    {
+	        throw new DeliveryExceptionHandler("Invoice date not specified or invalid");
+	    }
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+	    dateFormat.setLenient(false); 
+	    try 
+	    {
+	        dateFormat.parse(deliveryDate);
+	    } catch (ParseException e) {
+	        throw new DeliveryExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
+	    }
+	}
+	
 	//
-	static Connection con = null;
+		static Connection con = null;
     	static Statement stmt = null;
 
-    	public static void main(String[] args) 
+    	public static void main(String[] args) throws DeliveryExceptionHandler
 	{
         	Scanner in = new Scanner(System.in);
         	init_db(); // Open the connection to the database
@@ -99,14 +154,18 @@ public class Deliveries
             	// Get delivery docket details from the user
             	System.out.println("Please Enter the Customer ID:");
             	int customerId = in.nextInt();
+            	validatecustId(customerId);
             	System.out.println("Please Enter the Order ID:");
             	int orderId = in.nextInt();
+            	validateordId(orderId);
             	in.nextLine(); // Consume the newline left-over
             	System.out.println("Please Enter the Publication Name:");
             	String publicationName = in.nextLine();
+            	validatepubliName(publicationName);
             	System.out.println("Please Enter the Delivery Date (YYYY-MM-DD):");
             	String deliveryDate = in.nextLine();
-
+            	validatedeliveryDate(deliveryDate);
+            	
             	// Prepare the statement
             	PreparedStatement pstmt = con.prepareStatement(str);
             	pstmt.setInt(1, customerId);
@@ -155,7 +214,7 @@ public class Deliveries
 		{
             	Class.forName("com.mysql.cj.jdbc.Driver");
             	String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC";
-            	con = DriverManager.getConnection(url, "root", "root");
+            	con = DriverManager.getConnection(url, "root", "Root");
             	stmt = con.createStatement();
         	} 
 		catch (Exception e) 
