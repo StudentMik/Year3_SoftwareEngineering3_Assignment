@@ -2,22 +2,27 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Order {
-    private int customerId; //needs customer id to create order
+    private int customerId; // needs customer id to create order
     private long customerPhoneNumber; // need customer phone number to create order
     private double publicationPrice; // price of each publication on the order
     private boolean canSendOrder;
 
-    // bill will be a method
+    // Constructor to initialize an Order
+    public Order(int customerId, long customerPhoneNumber, double publicationPrice, boolean canSendOrder) throws OrderExceptionHandler {
+        // Validate inputs
+        validateCustomerId(customerId);
+        validateCustomerPhoneNumber(customerPhoneNumber);
+        validatePublicationPrice(publicationPrice);
+        validateCanSendOrder(canSendOrder);
 
- public Order(int  customerId, long customerPhoneNumber, double publicationPrice, boolean canSendOrder )
- {
-     this.customerId = customerId;
-     this.customerPhoneNumber = customerPhoneNumber;
-     this.publicationPrice = customerId;
-     this.canSendOrder = canSendOrder;
+        // Set attributes
+        this.customerId = customerId;
+        this.customerPhoneNumber = customerPhoneNumber;
+        this.publicationPrice = publicationPrice;
+        this.canSendOrder = canSendOrder;
+    }
 
- }
-
+    // Getters and setters
     public int getCustomerId() {
         return customerId;
     }
@@ -49,6 +54,44 @@ public class Order {
     public void setCanSendOrder(boolean canSendOrder) {
         this.canSendOrder = canSendOrder;
     }
+
+    //--------------Validation methods------------------//
+
+    private void validateCustomerId(int customerId) throws OrderExceptionHandler {
+        if (customerId <= 0) {
+            throw new OrderExceptionHandler("Invalid Customer ID. It must be greater than 0.");
+        }
+    }
+
+    private void validateCustomerPhoneNumber(long customerPhoneNumber) throws OrderExceptionHandler {
+        String phoneStr = String.valueOf(customerPhoneNumber); // Convert long to String for validation
+
+        if (phoneStr.isBlank()) {
+            throw new OrderExceptionHandler("Customer Phone Number NOT specified.");
+        } else if (phoneStr.length() < 7) {
+            throw new OrderExceptionHandler("Customer Phone Number does not meet minimum length requirements.");
+        } else if (phoneStr.length() > 15) {
+            throw new OrderExceptionHandler("Customer Phone Number exceeds maximum length requirements.");
+        }
+    }
+
+    private void validatePublicationPrice(double publicationPrice) throws OrderExceptionHandler {
+        if (publicationPrice <= 0) {
+            throw new OrderExceptionHandler("Publication price must be a positive value.");
+        }
+    }
+
+    private void validateCanSendOrder(boolean canSendOrder) throws OrderExceptionHandler {
+
+    }
+
+    // Placeholder method for generating the bill
+    public void bill() {}
+
+
+
+
+    //------ connect to database newsagent-------------//
 
     static Connection con = null;
     static Statement stmt = null;
@@ -107,7 +150,7 @@ public class Order {
     public static void init_db() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/News_Agent?useTimezone=true&serverTimezone=UTC"; // Updated database name
+            String url = "jdbc:mysql://localhost:3306/newsagent?useTimezone=true&serverTimezone=UTC"; // Updated database name
             con = DriverManager.getConnection(url, "root", "password");
             stmt = con.createStatement();
         } catch (Exception e) {
@@ -115,16 +158,6 @@ public class Order {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
