@@ -97,6 +97,7 @@ public class Customer
 	{
 		
 	}
+	
 	    static Connection con = null;
 	    static Statement stmt = null;
 	    static ResultSet rs = null;
