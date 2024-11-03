@@ -120,7 +120,7 @@ public class Invoice
 	
 	
 //----------Database----------//
-	static Connection con = null;
+    static Connection con = null;
     static Statement stmt = null;
     static ResultSet rs = null;
 
