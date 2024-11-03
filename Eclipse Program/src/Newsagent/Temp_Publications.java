@@ -185,7 +185,6 @@ public class Publications
 
     	public void addPublication() throws PublicationExceptionHandler{
 		Scanner in = new Scanner(System.in);
-		
 			try {
 				// SQL insert statement for the publication table
 				String str = "INSERT INTO publication (PublicationName, PublicationPrice, Schedule) VALUES (?, ?, ?)";
