@@ -1,35 +1,43 @@
 import java.sql.*;
 import java.util.Scanner;
 
+
+
+ class OrderExceptionHandler  extends Exception{
+
+     public OrderExceptionHandler(String message)
+     {
+         super(message); // Call the parent constructor with the error message
+     }
+
+
+}
+
+
 public class Order {
-    private int customerId; // needs customer id to create order
+   // private int customerId; // needs customer id to create order
     private long customerPhoneNumber; // need customer phone number to create order
     private double publicationPrice; // price of each publication on the order
-    private boolean canSendOrder;
+    private int OrderId;
+    private  int  Quantity;
+    private String PublicationName;
 
     // Constructor to initialize an Order
-    public Order(int customerId, long customerPhoneNumber, double publicationPrice, boolean canSendOrder) throws OrderExceptionHandler {
-        // Validate inputs
-        validateCustomerId(customerId);
-        validateCustomerPhoneNumber(customerPhoneNumber);
+    public Order(int OrderId, int publicationName, double publicationPrice, String Quantity) throws OrderExceptionHandler {
+
+        validatePublicationName(String.valueOf(publicationName));
         validatePublicationPrice(publicationPrice);
-        validateCanSendOrder(canSendOrder);
+        validateQuantity(Integer.valueOf(Quantity));
+        validateOrderId(OrderId);
 
         // Set attributes
-        this.customerId = customerId;
-        this.customerPhoneNumber = customerPhoneNumber;
+        this.OrderId = OrderId;
         this.publicationPrice = publicationPrice;
-        this.canSendOrder = canSendOrder;
+        this.Quantity = Integer.parseInt(Quantity);
+
     }
 
-    // Getters and setters
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
+    //---------------- Getters and setters-----------------//
 
     public long getCustomerPhoneNumber() {
         return customerPhoneNumber;
@@ -47,42 +55,40 @@ public class Order {
         this.publicationPrice = publicationPrice;
     }
 
-    public boolean isCanSendOrder() {
-        return canSendOrder;
-    }
 
-    public void setCanSendOrder(boolean canSendOrder) {
-        this.canSendOrder = canSendOrder;
-    }
+
 
     //--------------Validation methods------------------//
 
-    private void validateCustomerId(int customerId) throws OrderExceptionHandler {
-        if (customerId <= 0) {
-            throw new OrderExceptionHandler("Invalid Customer ID. It must be greater than 0.");
+
+    private void validateQuantity(Integer Quantity) throws OrderExceptionHandler {
+        if (Quantity == null || Quantity < 0 )
+        {
+            throw new OrderExceptionHandler("Invalid Quantity: must be a an int and greater than 1 .");
         }
     }
 
-    private void validateCustomerPhoneNumber(long customerPhoneNumber) throws OrderExceptionHandler {
-        String phoneStr = String.valueOf(customerPhoneNumber); // Convert long to String for validation
 
-        if (phoneStr.isBlank()) {
-            throw new OrderExceptionHandler("Customer Phone Number NOT specified.");
-        } else if (phoneStr.length() < 7) {
-            throw new OrderExceptionHandler("Customer Phone Number does not meet minimum length requirements.");
-        } else if (phoneStr.length() > 15) {
-            throw new OrderExceptionHandler("Customer Phone Number exceeds maximum length requirements.");
+    private void validatePublicationPrice(Double publicationPrice) throws OrderExceptionHandler {
+        if (publicationPrice == null || publicationPrice == 0 )
+        {
+            throw new OrderExceptionHandler("Invalid Publication price: must be a double not an int.");
         }
     }
 
-    private void validatePublicationPrice(double publicationPrice) throws OrderExceptionHandler {
-        if (publicationPrice <= 0) {
-            throw new OrderExceptionHandler("Publication price must be a positive value.");
+    private void validateOrderId( Integer OrderId) throws OrderExceptionHandler {
+        if(OrderId == null  ||  OrderId == 0  || OrderId < 0)
+        {
+            throw new OrderExceptionHandler("Invalid Order Id: must be an int  and has to be greater than 0");
         }
     }
 
-    private void validateCanSendOrder(boolean canSendOrder) throws OrderExceptionHandler {
-
+    private void  validatePublicationName(String publicationName) throws OrderExceptionHandler
+    {
+        if (publicationName == null  || publicationName.length() < 1 || publicationName.length() > 15)
+        {
+            throw new OrderExceptionHandler("Invalid Publication name: must be between 7 and 15 characters.");
+        }
     }
 
     // Placeholder method for generating the bill
@@ -91,7 +97,7 @@ public class Order {
 
 
 
-    //------ connect to database newsagent-------------//
+    //--------- connect to database newsagent-------------//
 
     static Connection con = null;
     static Statement stmt = null;
@@ -101,16 +107,49 @@ public class Order {
 
         Scanner in = new Scanner(System.in);
         init_db(); // Open the connection to the database
+
+
+        while (true)
+        {
+            try
+            {
+                System.out.println("Please Enter the orderId:");
+                int orderId = Integer.parseInt(in.nextLine());  // Use nextLine() to capture full name
+                System.out.println("Please Enter the Quantity:");
+                int Quantity = Integer.parseInt(in.nextLine());
+                System.out.println("Please Enter the price:");
+                Double ordertotalprice = Double.valueOf(in.nextLine());
+                System.out.println("Please Enter the Publication name:");
+                String PublicationName = in.nextLine();
+
+                Order order = new Order(orderId,Quantity,ordertotalprice,PublicationName);
+                break;
+
+            }
+            catch (OrderExceptionHandler e)
+            {
+                System.out.println("Order Error: " + e.getMessage());
+                System.out.println("Press Enter to retry...");
+                in.nextLine(); // Wait for user to hit Enter before retrying
+            }
+        }
+
+
+
+
+
+
+
         try {
             // SQL insert statement for the customers table
-            String str = "INSERT INTO orders (OrderId, CustomerId, OrderTotalPrice,PublicationName" +
+            String str = "INSERT INTO orders (OrderId, Quantity, OrderTotalPrice,PublicationName" +
                     " ) VALUES (?, ?, ?, ?)";
 
-            // Get customer details from the user
+            // Get Order details from the user
             System.out.println("Please Enter the orderId:");
             String orderId = in.nextLine();  // Use nextLine() to capture full name
-            System.out.println("Please Enter the customerId:");
-            String customerId = in.nextLine();
+            System.out.println("Please Enter the Quantity:");
+            String Quantity = in.nextLine();
             System.out.println("Please Enter the price:");
             String ordertotalprice = in.nextLine();
             System.out.println("Please Enter the Publication name:");
@@ -119,7 +158,7 @@ public class Order {
             // Prepare the statement
             PreparedStatement pstmt = con.prepareStatement(str);
             pstmt.setString(1, orderId);
-            pstmt.setString(2, customerId);
+            pstmt.setString(2, Quantity);
             pstmt.setString(3, ordertotalprice);
             pstmt.setString(4, PublicationName);
 
@@ -133,8 +172,8 @@ public class Order {
                 System.out.println("Failed to add order.");
             }
 
-        } catch (SQLException sqle) {
-            System.out.println("Error: " + sqle.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         } finally {
             // Close the database connection
             try {
