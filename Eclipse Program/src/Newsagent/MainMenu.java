@@ -8,7 +8,9 @@ public class MainMenu {
 	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler
 	{
 		Scanner in = new Scanner(System.in);
-		 System.out.println("Choose an Option:");
+		while (true)
+		{
+			System.out.println("Choose an Option:");
 	        System.out.println("1.	Customer");
 	       	System.out.println("2.	Deliveries");
 	       	System.out.println("3.	Invoice");
@@ -54,8 +56,10 @@ public class MainMenu {
 	        				
 	       		default:
 	       			System.out.println("Error: Invalid Choice");
-	       			in.close();
+	       			System.out.println("Press Enter to Retry.....");
+                    in.nextLine();
 	        }
+		}
 		}
 		
 	}
