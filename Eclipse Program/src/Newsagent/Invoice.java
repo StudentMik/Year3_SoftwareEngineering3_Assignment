@@ -130,7 +130,7 @@ public class Invoice
 		{
    			Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC"; // Updated database name
-            con = DriverManager.getConnection(url, "root", "Root");
+            con = DriverManager.getConnection(url, "root", "root");
         } 
     	catch (Exception e) 
 		{
@@ -174,10 +174,12 @@ public class Invoice
        	{
        		case 1:
        			invoices.addInvoice();
+       			in.close();
        			break;
 
         	case 2:
         		invoices.displayInvoices();
+        		in.close();
        			break;
 
        		case 3:
@@ -219,6 +221,7 @@ public class Invoice
 
            	// Execute the update
            	int rows = pstmt.executeUpdate();
+           	in.close();
 
            	// Check if the insert was successful
            	if (rows > 0) 
@@ -260,7 +263,7 @@ public class Invoice
     	} 
     	catch (SQLException e) 
     	{
-    			e.printStackTrace();
+    		e.printStackTrace();
     	}
     }
 }
