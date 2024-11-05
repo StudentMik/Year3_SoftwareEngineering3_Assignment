@@ -7,22 +7,26 @@ public class Deliveries
 {
 	//private int driverID;
 	//private int deliveryDArea; //1-24
-	private float deliveryDate;
+	private String deliveryDate;
 	private int customerId;
 	private int orderId;
 	//private String deliveryAddress;
 	private String publicationName;  //publications delivered
 	
-	public Deliveries(int driverID, int deliveryDArea, float deliveryDate, int customerId, int orderId, String deliveryAddress, String publicationName) {
+
+//----------Constructor----------//
+	public Deliveries(int customerId, int orderId, String publicationName, String deliveryDate) {
 		//this.driverID = driverID;
 		//this.deliveryDArea = deliveryDArea;
-		this.deliveryDate = deliveryDate;
 		this.customerId = customerId;
 		this.orderId = orderId;
 		//this.deliveryAddress = deliveryAddress;
 		this.publicationName = publicationName;
+		this.deliveryDate = deliveryDate;
 	}
 
+	
+//----------Getters & Setters----------//
 	/*public int getDriverID() 
 	{
 		return driverID;
@@ -41,11 +45,11 @@ public class Deliveries
 		this.deliveryDArea = deliveryDArea;
 	}*/
 
-	public float getDeliveryDate() 
+	public String getDeliveryDate() 
 	{
 		return deliveryDate;
 	}
-	public void setDeliveryDate(int deliveryDate) 
+	public void setDeliveryDate(String deliveryDate) 
 	{
 		this.deliveryDate = deliveryDate;
 	}
@@ -84,6 +88,8 @@ public class Deliveries
 		this.publicationName = publicationName;
 	}
 
+	
+//----------Validation----------//
 	public static void validatecustId(int customerId) throws DeliveryExceptionHandler 
 	{
 	    if(customerId <= 0) 
@@ -95,6 +101,7 @@ public class Deliveries
 	        throw new DeliveryExceptionHandler("CustomerId exceeds Maximum");
 	    }
 	}
+	
 	public static void validateordId(int orderId) throws DeliveryExceptionHandler 
 	{
 	    if(orderId <= 0) 
@@ -106,6 +113,7 @@ public class Deliveries
 	        throw new DeliveryExceptionHandler("OrderId exceeds Maximum");
 	    }
 	}
+	
 	public static void validatepubliName(String publicationName) throws DeliveryExceptionHandler
 	{
 		if (publicationName.isBlank() || publicationName.isEmpty())
@@ -122,6 +130,7 @@ public class Deliveries
 		}
 		
 	}
+	
 	public static void validatedeliveryDate(String deliveryDate) throws DeliveryExceptionHandler 
 	{
 	    if (deliveryDate == null || deliveryDate.isEmpty()) 
@@ -139,88 +148,153 @@ public class Deliveries
 	}
 	
 	
-	//Connect to Database
-		static Connection con = null;
-    	static Statement stmt = null;
+//----------Database----------//
+	static Connection con = null;
+   	static Statement stmt = null;
+   	static ResultSet rs = null;
 
-    	public static void main(String[] args) throws DeliveryExceptionHandler
+   	public static void init_db() 
+   	{
+   		try 
+		{
+   			Class.forName("com.mysql.cj.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC"; // Updated database name
+            con = DriverManager.getConnection(url, "root", "Root");
+        } 
+    	catch (Exception e) 
+		{
+            System.out.println("Error: Failed to connect to database\n" + e.getMessage());
+        }
+    }
+    	
+    public static void close_db()
+    {
+    	try 
+		{
+    		if (con != null) 
+    		{
+    			con.close();
+                System.out.println("Database Closed");
+            }
+        } 
+        catch (SQLException sqle) 
+    	{
+        	System.out.println("Error: failed to close the database");
+        }
+    }
+    
+   	public static void main(String[] args) throws DeliveryExceptionHandler
     	{
         	Scanner in = new Scanner(System.in);
+        	Deliveries deliveryDocket = new Deliveries(0, 0, "The Daily Mirror", "2008-04-07");
         	init_db(); // Open the connection to the database
-        	try 
-			{
-            	// SQL insert statement for the delivery_docket table
-            	String str = "INSERT INTO delivery_docket (CustomerId, OrderId, PublicationName, DeliveryDate) VALUES (?, ?, ?, ?)";
+        	
+        	System.out.println("Choose an Option:");
+        	System.out.println("1. Add a new DeliveryDocket");
+        	System.out.println("2. Display all Deliveries");
+        	System.out.println("3. Exit");
+        	System.out.print(": ");
 
-            	// Get delivery docket details from the user
-            	System.out.println("Please Enter the Customer ID:");
-            	int customerId = in.nextInt();
-            	validatecustId(customerId);
-            	System.out.println("Please Enter the Order ID:");
-            	int orderId = in.nextInt();
-            	validateordId(orderId);
-            	in.nextLine(); // Consume the newline left-over
-            	System.out.println("Please Enter the Publication Name:");
-            	String publicationName = in.nextLine();
-            	validatepubliName(publicationName);
-            	System.out.println("Please Enter the Delivery Date (YYYY-MM-DD):");
-            	String deliveryDate = in.nextLine();
-            	validatedeliveryDate(deliveryDate);
+        	int choice = in.nextInt();
+        	in.nextLine();
+
+        	switch (choice) 
+        	{
+        		case 1:
+        			deliveryDocket.addDeliveryD();
+        			break;
+
+        		case 2:
+        			deliveryDocket.displayDeliveries();
+        			break;
+
+        		case 3:
+        			System.out.println("Exiting the program.");
+        			in.close();
+        			close_db();
+        			return;
+        				
+        		default:
+        		System.out.println("Error: Invalid Choice");
+        	} 
+    	}
+        	
+//----------Create: Add DeliveryD----------//
+   	public void addDeliveryD() throws DeliveryExceptionHandler
+   	{
+   		Scanner in = new Scanner(System.in);
+        try 
+        {
+        	// SQL insert statement for the delivery_docket table
+            String str = "INSERT INTO delivery_docket (CustomerId, OrderId, PublicationName, DeliveryDate) VALUES (?, ?, ?, ?)";
+
+            // Get delivery docket details from the user
+            System.out.println("Please Enter the Customer ID:");
+            int customerId = in.nextInt();
+            validatecustId(customerId);
+            System.out.println("Please Enter the Order ID:");
+            int orderId = in.nextInt();
+            validateordId(orderId);
+            in.nextLine(); // Consume the newline left-over
+            System.out.println("Please Enter the Publication Name:");
+            String publicationName = in.nextLine();
+            validatepubliName(publicationName);
+            System.out.println("Please Enter the Delivery Date (YYYY-MM-DD):");
+            String deliveryDate = in.nextLine();
+            validatedeliveryDate(deliveryDate);
             	
-            	// Prepare the statement
-            	PreparedStatement pstmt = con.prepareStatement(str);
-            	pstmt.setInt(1, customerId);
-            	pstmt.setInt(2, orderId);
-            	pstmt.setString(3, publicationName);
-            	pstmt.setString(4, deliveryDate);
+            // Prepare the statement
+            PreparedStatement pstmt = con.prepareStatement(str);
+            pstmt.setInt(1, customerId);
+            pstmt.setInt(2, orderId);
+            pstmt.setString(3, publicationName);
+            pstmt.setString(4, deliveryDate);
 
-            	// Execute the update
-            	int rows = pstmt.executeUpdate();
+            // Execute the update
+            int rows = pstmt.executeUpdate();
 
-            	// Check if the insert was successful
-            	if (rows > 0) 
-            	{
-                	System.out.println("Delivery docket added successfully!");
-            	} 
-            	else
-            	{
-                	System.out.println("Failed to add delivery docket.");
-            	}
-
-        	} 
-        	catch (SQLException sqle) 
-			{
-            	System.out.println("Error: " + sqle.getMessage());
-        	} 
-        	finally 
-			{
-            	// Close the database connection
-            	try 
-            	{
-                	if (con != null) 
-                	{
-                    	con.close();
-                	}
-            	} 
-            	catch (SQLException sqle) 
-            	{
-                	System.out.println("Error: failed to close the database");
-            	}
-        	}
-    	}
-
-    	public static void init_db() 
+            // Check if the insert was successful
+            if (rows > 0) 
+            {
+            	System.out.println("Delivery docket added successfully!");
+            } 
+            else
+            {
+            	System.out.println("Failed to add delivery docket.");
+            }
+            pstmt.close();
+            close_db();
+        } 
+        catch (SQLException sqle) 
+        {
+        	System.out.println("Error: " + sqle.getMessage());
+        }      	
+   }	
+   	
+   	
+//----------Read: Display Deliveries----------//
+    public void displayDeliveries() 
+    {
+    	try 
     	{
-        	try 
-        	{
-            	Class.forName("com.mysql.cj.jdbc.Driver");
-            	String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC";
-            	con = DriverManager.getConnection(url, "root", "root");
-            	stmt = con.createStatement();
-        	} 
-        	catch (Exception e) 
-        	{
-            	System.out.println("Error: Failed to connect to database\n" + e.getMessage());
-        	}
+    		stmt = con.createStatement();
+            String query = "SELECT * FROM delivery_docket";
+            rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+            	System.out.println("Customer Id: " + rs.getInt("customerId"));
+            	System.out.println("Order Id: " + rs.getInt("orderId"));
+            	System.out.println("Publication Name: " + rs.getString("publicationName"));
+            	System.out.println("Delivery Date: " + rs.getString("deliveryDate"));
+            	System.out.println("-------------------------------");
+    		}
+    		rs.close();
+            stmt.close();
+            close_db();
+    	} 
+    	catch (SQLException e) 
+    	{
+    			e.printStackTrace();
     	}
+    }
 }
