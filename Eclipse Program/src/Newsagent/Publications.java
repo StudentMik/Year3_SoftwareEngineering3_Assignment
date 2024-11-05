@@ -92,7 +92,7 @@ public class Publications
 		{
    			Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/NewsAgent?useTimezone=true&serverTimezone=UTC"; // Updated database name
-            con = DriverManager.getConnection(url, "root", "Root");
+            con = DriverManager.getConnection(url, "root", "root");
         } 
     	catch (Exception e) 
 		{
@@ -137,10 +137,12 @@ public class Publications
     	{
     		case 1:
     			publications.addPublication();
+    			in.close();
     			break;
 
     		case 2:
     			publications.displayPublications();
+    			in.close();
     			break;
 
     		case 3:
@@ -184,6 +186,7 @@ public class Publications
 
 			// Execute the update
 			int rows = pstmt.executeUpdate();
+			in.close();
 			
 			// Check if the insert was successful
 			if (rows > 0) 
