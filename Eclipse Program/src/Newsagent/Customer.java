@@ -216,6 +216,7 @@ public class Customer
             // Connect using the URL, username, and password
             return DriverManager.getConnection(url, "root", "root");
         } 
+        
         catch (ClassNotFoundException e) 
         {
             // Show error if database driver is not found
