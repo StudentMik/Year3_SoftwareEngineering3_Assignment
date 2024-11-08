@@ -3,130 +3,130 @@ package Newsagent;
 import java.util.Scanner;
 import java.sql.*;
 
-// Custom exception class for customer-related errors
-class CustomerExceptionHandler extends Exception 
-{
-    public CustomerExceptionHandler(String message) 
-    {
-        super(message); // Call the parent constructor with the error message
-    }
-}
-
+// This class represents a customer in the system
 public class Customer 
 {
-    // Instance variables to hold customer information
-    private int id;
-    private String name;
-    private String address;
-    private String phoneNumber; // Phone number is kept as String for flexibility
+    // Information about the customer
+    private int id;             // Customer ID (starts as 0 by default)
+    private String name;        // Customer name
+    private String address;     // Customer address
+    private String phoneNumber; // Customer phone number (stored as text)
 
-    // Constructor to initialize customer details
+    // Constructor to create a new customer with given details
     public Customer(String custName, String custAddress, String custPhone) throws CustomerExceptionHandler 
     {
-        // Validate customer details
-        validateName(custName);
-        validateAddress(custAddress);
-        validatePhoneNumber(custPhone);
+        // Check if the provided name, address, and phone are valid
+        validateName(custName); // Check if name is allowed
+        validateAddress(custAddress); // Check if address is allowed
+        validatePhoneNumber(custPhone); // Check if phone number is allowed
 
-        // Set attributes after validation
-        this.id = 0; // Default ID
-        this.name = custName;
-        this.address = custAddress;
-        this.phoneNumber = custPhone;
+        // Set the information for this customer
+        this.id = 0; // ID starts at 0 (can be changed later)
+        this.name = custName; // Set the name
+        this.address = custAddress; // Set the address
+        this.phoneNumber = custPhone; // Set the phone number
     }
 
-    // Getters and Setters
+    // Get the customer ID
     public int getId() 
     {
         return id;
     }
 
+    // Set the customer ID
     public void setId(int id) 
     {
         this.id = id;
     }
 
+    // Get the customer name
     public String getName() 
     {
         return name;
     }
 
+    // Set the customer name
     public void setName(String name) 
     {
         this.name = name;
     }
 
+    // Get the customer address
     public String getAddress() 
     {
         return address;
     }
 
+    // Set the customer address
     public void setAddress(String address) 
     {
         this.address = address;
     }
 
+    // Get the customer phone number
     public String getPhoneNumber() 
     {
         return phoneNumber;
     }
 
+    // Set the customer phone number
     public void setPhoneNumber(String phoneNumber) 
     {
         this.phoneNumber = phoneNumber;
     }
 
-    // Method to validate customer name
+    // Check if the customer name is allowed
     private void validateName(String custName) throws CustomerExceptionHandler 
     {
-        // Check if the customer name is null, empty, or not within the character limit
+        // Make sure name is not empty, not too short, not too long, and has only letters
         if (custName == null || custName.isBlank() || custName.length() < 2 || custName.length() > 50) 
         {
             throw new CustomerExceptionHandler("Invalid customer name: must be between 2 and 50 characters.");
         }
 
-        // Check if the name contains only letters (using regex)
-        if (!custName.matches("[a-zA-Z]+")) 
+        if (!custName.matches("[a-zA-Z]+")) // Check for letters only
         {
             throw new CustomerExceptionHandler("Invalid customer name: must contain only letters.");
         }
     }
 
-    // Method to validate customer address
+    // Check if the customer address is allowed
     private void validateAddress(String custAddress) throws CustomerExceptionHandler 
     {
+        // Make sure address is not empty, not too short, and not too long
         if (custAddress == null || custAddress.isBlank() || custAddress.length() < 5 || custAddress.length() > 60) 
         {
             throw new CustomerExceptionHandler("Invalid customer address: must be between 5 and 60 characters.");
         }
     }
 
-    // Method to validate customer phone number
+    // Check if the customer phone number is allowed
     private void validatePhoneNumber(String custPhone) throws CustomerExceptionHandler 
     {
+        // Make sure phone number is not empty, not too short, and not too long
         if (custPhone == null || custPhone.isBlank() || custPhone.length() < 7 || custPhone.length() > 15) 
         {
             throw new CustomerExceptionHandler("Invalid customer phone number: must be between 7 and 15 characters.");
         }
     }
 
-    // Method to add customer to the database
+    // Add the customer to the database
     public void addToDatabase(Connection con) throws SQLException 
     {
-        // SQL insert statement for the customers table
+        // SQL code to add customer information to the "customers" table
         String str = "INSERT INTO customers (Name, Address, ContactNo) VALUES (?, ?, ?)";
 
-        // Prepare the statement
+        // Prepare the SQL statement with customer information
         try (PreparedStatement pstmt = con.prepareStatement(str)) 
         {
-            pstmt.setString(1, this.name);
-            pstmt.setString(2, this.address);
-            pstmt.setString(3, this.phoneNumber);
+            pstmt.setString(1, this.name); // Set name
+            pstmt.setString(2, this.address); // Set address
+            pstmt.setString(3, this.phoneNumber); // Set phone number
 
-            // Execute the update
+            // Run the SQL command to add the customer
             int rows = pstmt.executeUpdate();
 
-            // Check if the insert was successful
+            // If one or more rows were added, it means the customer was added successfully
             if (rows > 0) 
             {
                 System.out.println("Customer added successfully!");
@@ -138,7 +138,7 @@ public class Customer
         }
     }
 
-    // Main method for testing the Customer class
+    // Main method to test adding a customer
     public static void main(String[] args) 
     {
         Scanner in = new Scanner(System.in);
@@ -146,19 +146,19 @@ public class Customer
 
         try 
         {
-            // Initialize the database connection
+            // Start the database connection
             con = init_db();
 
-            String name = "";
-            String address = "";
-            String contactNo = "";
+            String name = ""; // Customer name
+            String address = ""; // Customer address
+            String contactNo = ""; // Customer phone number
 
-            // Loop to get valid customer details
+            // Keep asking for customer details until they are valid
             while (true) 
             {
                 try 
                 {
-                    // Get customer details from the user
+                    // Ask user to enter customer details
                     System.out.println("Please Enter the Name:");
                     name = in.nextLine();
                     System.out.println("Please Enter the Address:");
@@ -166,14 +166,15 @@ public class Customer
                     System.out.println("Please Enter the Contact Number:");
                     contactNo = in.nextLine();
 
-                    // Create a new customer object
+                    // Create a new customer with the details
                     Customer customer = new Customer(name, address, contactNo);
                     // Add customer to the database
                     customer.addToDatabase(con);
-                    break; // Exit loop on successful addition
+                    break; // Stop asking once customer is added
                 } 
                 catch (CustomerExceptionHandler e) 
                 {
+                    // If there is an error, show the message and ask again
                     System.out.println("Customer Error: " + e.getMessage());
                     System.out.println("Press Enter to retry...");
                     in.nextLine(); // Wait for user to hit Enter before retrying
@@ -182,6 +183,7 @@ public class Customer
         } 
         catch (SQLException e) 
         {
+            // Show error message if there is an issue with the database
             System.out.println("SQL Error: " + e.getMessage());
         } 
         finally 
@@ -198,22 +200,35 @@ public class Customer
             {
                 System.out.println("Error: failed to close the database");
             }
-            in.close();
+            in.close(); // Close the scanner
         }
     }
 
-    // Method to initialize the database connection
+    // Connect to the database
     public static Connection init_db() throws SQLException 
     {
         try 
         {
+            // Load the database driver
             Class.forName("com.mysql.cj.jdbc.Driver");
+            // URL to connect to the database
             String url = "jdbc:mysql://localhost:3306/newsagent?useTimezone=true&serverTimezone=UTC";
+            // Connect using the URL, username, and password
             return DriverManager.getConnection(url, "root", "root");
         } 
         catch (ClassNotFoundException e) 
         {
+            // Show error if database driver is not found
             throw new SQLException("Database driver not found: " + e.getMessage());
         }
+    }
+}
+
+// A custom exception for handling customer-related errors
+class CustomerExceptionHandler extends Exception 
+{
+    public CustomerExceptionHandler(String message) 
+    {
+        super(message); // Send the error message to the parent Exception class
     }
 }
