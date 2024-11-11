@@ -155,7 +155,7 @@ public class Order {
         try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             System.out.println("Orders:");
             while (rs.next()) {
-                System.out.println("Order ID: " + rs.getInt("id"));
+                System.out.println("Order ID: " + rs.getInt("OrderId"));
                 System.out.println("Publication Name: " + rs.getString("PublicationName"));
                 System.out.println("Quantity: " + rs.getInt("Quantity"));
                 System.out.println("Total Price: " + rs.getDouble("OrderTotalPrice"));
@@ -179,7 +179,7 @@ public class Order {
         System.out.println("Enter new Publication Name:");
         String newPublicationName = in.nextLine();
 
-        String sql = "UPDATE orders SET Quantity = ?, OrderTotalPrice = ?, PublicationName = ? WHERE id = ?";
+        String sql = "UPDATE orders SET Quantity = ?, OrderTotalPrice = ?, PublicationName = ? WHERE OrderId = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, newQuantity);
             pstmt.setDouble(2, newPrice);
@@ -197,7 +197,7 @@ public class Order {
         System.out.println("Please enter the Order ID to delete:");
         int orderId = Integer.parseInt(in.nextLine());
 
-        String sql = "DELETE FROM orders WHERE id = ?";
+        String sql = "DELETE FROM orders WHERE OrderId = ?";
         try (PreparedStatement pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, orderId);
             int rows = pstmt.executeUpdate();
