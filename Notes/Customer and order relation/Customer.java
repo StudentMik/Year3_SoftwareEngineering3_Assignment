@@ -7,7 +7,7 @@ import java.sql.*;
 public class Customer 
 {
     // Information about the customer
-    private int id;             // Customer ID (starts as 0 by default)
+    public static int id;             // Customer ID (starts as 0 by default)
     private String name;        // Customer name
     private String address;     // Customer address
     private String phoneNumber; // Customer phone number (stored as text)
