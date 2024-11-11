@@ -2,10 +2,11 @@ package Newsagent;
 
 import java.util.Scanner;
 
-public class MainMenu {
+public class MainMenu
+{
 
 	
-	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler
+	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler
 	{
 		Scanner in = new Scanner(System.in);
 		while (true)
@@ -17,7 +18,7 @@ public class MainMenu {
 	       	System.out.println("4.	Order ");
 	       	System.out.println("5.	Publications");
 	       	System.out.println("6.	Exit");
-	       	System.out.println(":	");
+	       	System.out.println("	");
 	       	
 	       	int choice = in.nextInt();
 	       	in.nextLine();
