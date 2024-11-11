@@ -19,7 +19,6 @@ public class MainMenu
 	       	System.out.println("5.	Publications");
 	       	System.out.println("6.	Exit");
 	       	System.out.println("	");
-	       	
 	       	int choice = in.nextInt();
 	       	in.nextLine();
 
