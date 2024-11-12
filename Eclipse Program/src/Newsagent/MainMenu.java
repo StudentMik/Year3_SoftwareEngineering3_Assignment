@@ -6,12 +6,12 @@ public class MainMenu
 {
 
 	
-	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler
+	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler, OrderExceptionHandler
 	{
 		Scanner in = new Scanner(System.in);
 		while (true)
 		{
-			System.out.println("Choose an Option:");
+		System.out.println("Choose an Option:");
 	        System.out.println("1.	Customer");
 	       	System.out.println("2.	Deliveries");
 	       	System.out.println("3.	Invoice");
