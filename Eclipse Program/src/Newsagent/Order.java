@@ -1,3 +1,5 @@
+package Newsagent;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -135,7 +137,7 @@ public class Order {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/newsagent?useTimezone=true&serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "root", "password");
+            con = DriverManager.getConnection(url, "root", "root");
         } catch (Exception e) {
             System.out.println("Error: Failed to connect to database\n" + e.getMessage());
         }

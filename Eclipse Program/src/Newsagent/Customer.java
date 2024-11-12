@@ -176,7 +176,7 @@ public class Customer
     }
 
     //---------Main Program-------//
-    public static void main(String[] args) throws CustomerExceptionHandler, DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler
+    public static void main(String[] args) throws CustomerExceptionHandler, DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, OrderExceptionHandler
     {
         Scanner in = new Scanner(System.in);
         Connection con = null;

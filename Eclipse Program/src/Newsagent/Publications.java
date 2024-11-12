@@ -68,7 +68,7 @@ public class Publications {
     public static void init_db() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");// Load MySQL JDBC driver
-            String url = "jdbc:mysql://localhost:3306/News_Agent?useTimezone=true&serverTimezone=UTC"; // Database URL
+            String url = "jdbc:mysql://localhost:3306/newsagent?useTimezone=true&serverTimezone=UTC"; // Database URL
             con = DriverManager.getConnection(url, "root", "root"); // Establish connection to the database
             stmt = con.createStatement(); // Create a statement object for executing SQL queries
         } catch (Exception e) {
@@ -134,7 +134,8 @@ public class Publications {
 
              // Print the details of each publication
                 System.out.println("ID: " + id + ", Name: " + name + ", Price: " + price + ", Schedule: " + schedule);
-            }
+                System.out.println(""); 
+                }
         } catch (SQLException sqle) {
             System.out.println("Error: " + sqle.getMessage()); // Handle SQL errors
         }
