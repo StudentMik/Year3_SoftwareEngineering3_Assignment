@@ -5,23 +5,18 @@ import java.text.*;
 
 public class Invoice
 {
-	private int orderId;
-	//private int quantity;
+	//int quantity;double pricePerItem;String publicationName;
+	private int orderId;  
 	private String invoiceDate;
 	private double invoiceTotal; 
-	//private double pricePerItem; 
-	//private String publicationName; 
 	
 	
 //-----------Constructor----------//
 	public Invoice(int orderId, String invoiceDate, double invoiceTotal) throws InvoiceExceptionHandler 
 	{
 		this.orderId = orderId;
-		//this.quantity = quantity;
 		this.invoiceDate = invoiceDate;
 		this.invoiceTotal = invoiceTotal;
-		//this.pricePerItem = pricePerItem;
-		//this.publicationName = publicationName;
 	}
 
 	
@@ -34,15 +29,6 @@ public class Invoice
 	{
 		this.orderId = orderId;
 	}
-
-	/*public int getQuantity() 
-	{
-		return quantity;
-	}
-	public void setQuantity(int quantity) 
-	{
-		this.quantity = quantity;
-	}*/
 
 	public String getInvoiceDate() 
 	{
@@ -60,62 +46,6 @@ public class Invoice
 	public void setInvoiceTotal(double invoiceTotal) 
 	{
 		this.invoiceTotal = invoiceTotal;
-	}
-
-	/*public double getPricePerItem() 
-	{
-		return pricePerItem;
-	}
-	public void setPricePerItem(double pricePerItem) 
-	{
-		this.pricePerItem = pricePerItem;
-	}
-
-	public String getPublicationName() 
-	{
-		return publicationName;
-	}
-	public void setPublicationName(String publicationName) 
-	{
-		this.publicationName = publicationName;
-	}*/
-	
-	
-//----------Validation----------//
-	public static void validateordId(int orderId) throws InvoiceExceptionHandler 
-	{
-		//String ordID = String.valueOf(orderId);
-	    if(orderId <= 0) 
-	    {
-	        throw new InvoiceExceptionHandler("OrderId not specified or invalid");
-	    }
-	    if(orderId > 100) 
-	    {
-	        throw new InvoiceExceptionHandler("OrderId exceeds Maximum");
-	    }
-	}
-	
-	public static void validateinvoiceDate(String invoiceDate) throws InvoiceExceptionHandler 
-	{
-	    if (invoiceDate == null || invoiceDate.isEmpty()) 
-	    {
-	        throw new InvoiceExceptionHandler("Invoice date not specified or invalid");
-	    }
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-	    dateFormat.setLenient(false); 
-	    try 
-	    {
-	        dateFormat.parse(invoiceDate);
-	    } catch (ParseException e) {
-	        throw new InvoiceExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
-	    }
-	}
-	public static void validateinvoiceTotal(double invoiceTotal) throws InvoiceExceptionHandler 
-	{
-		if (invoiceTotal < 0) 
-		{
-	        throw new InvoiceExceptionHandler("Total cannot be negative");
-	    }
 	}
 	
 	
@@ -137,66 +67,75 @@ public class Invoice
             System.out.println("Error: Failed to connect to database\n" + e.getMessage());
         }
     }
-    	
-    public static void close_db()
-    {
-    	try 
-		{
-    		if (con != null) 
-    		{
-    			con.close();
-                System.out.println("Database Closed");
-            }
-        } 
-        catch (SQLException sqle) 
-    	{
-        	System.out.println("Error: failed to close the database");
-        }
-    }
     
-   	public static void main(String[] args) throws InvoiceExceptionHandler
+   	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler, OrderExceptionHandler
 	{
         Scanner in = new Scanner(System.in);
-       	Invoice invoices = new Invoice(0, "01-02-2003", 12.99); 
-
+        boolean on = true;
         init_db(); // Open the connection to the database
-        	
-        System.out.println("Choose an Option:");
-        System.out.println("1. Create a new Invoice");
-       	System.out.println("2. View Invoices");
-       	System.out.println("3. Exit");
-       	System.out.print(": ");
+        
+        while (on)
+        {
+        	System.out.println("Choose an Option:");
+        	System.out.println("1.	Create a new Invoice");
+        	System.out.println("2.	View Invoices");
+        	System.out.println("3. 	Update Invoice");
+        	System.out.println("4.	Delete Invoice");
+        	System.out.println("5.	Exit");
+        	System.out.print(": ");
 
-       	int choice = in.nextInt();
-       	in.nextLine();
+        	int choice = in.nextInt();
+        	in.nextLine();
 
-        switch (choice) 
-       	{
-       		case 1:
-       			invoices.addInvoice();
-       			in.close();
-       			break;
-
-        	case 2:
-        		invoices.displayInvoices();
-        		in.close();
-       			break;
-
-       		case 3:
-       			System.out.println("Exiting the program.");
-       			in.close();
-       			close_db();
-       			return;
+        	switch (choice) 
+        	{
+       			case 1:
+       				addInvoice(in);
+       				break;
+       			case 2:
+       				displayInvoices();
+       				break;
+       			case 3:
+       				updateInvoice();
+       				break;
+       			case 4:
+       				deleteInvoice(in);
+       				break;
+       			case 5:
+       				System.out.println("Exiting Invoices....");
+       				MainMenu.main(null);
+       				return;
         				
        		default:
        			System.out.println("Error: Invalid Choice");
+        	}
         }
-	}
+        try 
+        {
+        	if (con != null) 
+        	{
+        		con.close(); // Close database connection
+                System.out.println("fafaf");
+            }
+            if (stmt != null) 
+            {
+                stmt.close(); // Close statement object
+            }
+            if (rs != null) 
+            {
+                rs.close(); // Close result set object
+            }
+        } 
+        catch (SQLException sqle) 
+        {
+        	System.out.println("Error: failed to close the database"); // Handle closing exceptions
+        }
+    }
+
 
 //----------Create: New Invoice----------//
-   	public void addInvoice() throws InvoiceExceptionHandler
+   	public static void addInvoice(Scanner in)
     {
-   		Scanner in = new Scanner(System.in);
         try 
         {
         	// SQL insert statement for the invoice table
@@ -221,7 +160,6 @@ public class Invoice
 
            	// Execute the update
            	int rows = pstmt.executeUpdate();
-           	in.close();
 
            	// Check if the insert was successful
            	if (rows > 0) 
@@ -233,17 +171,19 @@ public class Invoice
                	System.out.println("Failed to add invoice.");
            	}
            	pstmt.close();
-           	close_db();
         } 
         catch (SQLException sqle) 
 		{
             System.out.println("Error: " + sqle.getMessage());
-        } 	
+        }
+        catch (InvoiceExceptionHandler e) {
+            System.out.println("Error: " + e.getMessage()); // Handle custom exceptions
+        }
     }
    	
    	
 //----------Read: Display Invoices----------//
-    public void displayInvoices() 
+    public static void displayInvoices() 
     {
     	try 
     	{
@@ -257,15 +197,85 @@ public class Invoice
             	System.out.println("Invoice Total: " + rs.getDouble("invoiceTotal"));
             	System.out.println("-------------------------------");
     		}
-    		rs.close();
-            stmt.close();
-            close_db();
     	} 
     	catch (SQLException e) 
     	{
     		e.printStackTrace();
     	}
     }
+    
+    
+//----------Update: Change Invoice info----------//
+    public static void updateInvoice()
+    {
+    	
+    }
+    
+    
+//----------Delete: Remove an Invoice----------//
+    public static void deleteInvoice(Scanner in)
+    {
+    	try {
+        	// Ask the user for the ID of the Invoice to delete
+            System.out.println("Please Enter the orderId of the Inovice to delete:");
+            String name = in.nextLine();
+            String deleteStr = "DELETE FROM invoice WHERE OrderId = ?";
+
+         // Prepare and execute the delete query
+            PreparedStatement pstmt = con.prepareStatement(deleteStr);
+            pstmt.setString(1, name);
+            int rows = pstmt.executeUpdate();
+
+            // Check if the delete was successful
+            if (rows > 0) {
+                System.out.println("Invoice deleted successfully!"); // Success message
+            } else {
+                System.out.println("Invoice not found or delete failed."); // Failure message
+            }
+            pstmt.close();
+        } catch (SQLException sqle) {
+            System.out.println("Error: " + sqle.getMessage());
+        }
+    }
+    
+    
+//----------Validation----------//
+  	public static void validateordId(int orderId) throws InvoiceExceptionHandler 
+  	{
+  		//String ordID = String.valueOf(orderId);
+  		if(orderId <= 0) 
+  		{
+  			throw new InvoiceExceptionHandler("OrderId not specified or invalid");
+  		}
+  		else if(orderId > 100) 
+  		{
+  		throw new InvoiceExceptionHandler("OrderId exceeds Maximum");
+  		}
+  	}
+  		
+  	public static void validateinvoiceDate(String invoiceDate) throws InvoiceExceptionHandler 
+  	{
+  		if (invoiceDate == null || invoiceDate.isEmpty()) 
+  		{
+  			throw new InvoiceExceptionHandler("Invoice date not specified or invalid");
+  		}
+  		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+  		    dateFormat.setLenient(false); 
+  		    try 
+  		    {
+  		        dateFormat.parse(invoiceDate);
+  		    } catch (ParseException e) {
+  		        throw new InvoiceExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
+  		    }
+  	}
+  	
+  	public static void validateinvoiceTotal(double invoiceTotal) throws InvoiceExceptionHandler 
+  	{
+  		if (invoiceTotal < 0) 
+  		{
+  			throw new InvoiceExceptionHandler("Total cannot be negative");
+  		}
+  	}
 }
 
 

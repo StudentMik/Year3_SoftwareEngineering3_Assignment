@@ -5,46 +5,24 @@ import java.util.Scanner;
 
 public class Deliveries
 {
-	//private int driverID;
-	//private int deliveryDArea; //1-24
+	//private int driverID; int deliveryDArea; //1-24 String deliveryAddress;
 	private String deliveryDate;
 	private int customerId;
 	private int orderId;
-	//private String deliveryAddress;
-	private String publicationName;  //publications delivered
+	private String publicationName;  
 	
 
 //----------Constructor----------//
-	public Deliveries(int customerId, int orderId, String publicationName, String deliveryDate) {
-		//this.driverID = driverID;
-		//this.deliveryDArea = deliveryDArea;
+	public Deliveries(int customerId, int orderId, String publicationName, String deliveryDate) 
+	{
 		this.customerId = customerId;
 		this.orderId = orderId;
-		//this.deliveryAddress = deliveryAddress;
 		this.publicationName = publicationName;
 		this.deliveryDate = deliveryDate;
 	}
 
 	
 //----------Getters & Setters----------//
-	/*public int getDriverID() 
-	{
-		return driverID;
-	}
-	public void setDriverID(int driverID) 
-	{
-		this.driverID = driverID;
-	}
-
-	public int getDeliveryDArea() 
-	{
-		return deliveryDArea;
-	}
-	public void setDeliveryDArea(int deliveryDArea) 
-	{
-		this.deliveryDArea = deliveryDArea;
-	}*/
-
 	public String getDeliveryDate() 
 	{
 		return deliveryDate;
@@ -70,15 +48,6 @@ public class Deliveries
 	{
 		this.orderId = orderId;
 	}
-
-	/*public String getDeliveryAddress() 
-	{
-		return deliveryAddress;
-	}
-	public void setDeliveryAddress(String deliveryAddress) 
-	{
-		this.deliveryAddress = deliveryAddress;
-	}*/
 	
 	public String getPublicationName() {
 		return publicationName;
@@ -88,66 +57,6 @@ public class Deliveries
 		this.publicationName = publicationName;
 	}
 
-	
-//----------Validation----------//
-	public static void validatecustId(int customerId) throws DeliveryExceptionHandler 
-	{
-	    if(customerId <= 0) 
-	    {
-	        throw new DeliveryExceptionHandler("CustomerId not specified or invalid");
-	    }
-	    if(customerId > 100) 
-	    {
-	        throw new DeliveryExceptionHandler("CustomerId exceeds Maximum");
-	    }
-	}
-	
-	public static void validateordId(int orderId) throws DeliveryExceptionHandler 
-	{
-	    if(orderId <= 0) 
-	    {
-	        throw new DeliveryExceptionHandler("OrderId not specified or invalid");
-	    }
-	    if(orderId > 100) 
-	    {
-	        throw new DeliveryExceptionHandler("OrderId exceeds Maximum");
-	    }
-	}
-	
-	public static void validatepubliName(String publicationName) throws DeliveryExceptionHandler
-	{
-		if (publicationName.isBlank() || publicationName.isEmpty())
-		{
-			throw new DeliveryExceptionHandler("Publication Name not specified or invalid");
-		}
-		else if (publicationName.length() < 5)
-		{
-			throw new DeliveryExceptionHandler("Publication Name does not meet minimum length requirements");
-		}
-		else if (publicationName.length() > 50)
-		{
-			throw new DeliveryExceptionHandler("Publication Name does not exceeds maximum length requirements");
-		}
-		
-	}
-	
-	public static void validatedeliveryDate(String deliveryDate) throws DeliveryExceptionHandler 
-	{
-	    if (deliveryDate == null || deliveryDate.isEmpty()) 
-	    {
-	        throw new DeliveryExceptionHandler("Invoice date not specified or invalid");
-	    }
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-	    dateFormat.setLenient(false); 
-	    try 
-	    {
-	        dateFormat.parse(deliveryDate);
-	    } catch (ParseException e) {
-	        throw new DeliveryExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
-	    }
-	}
-	
-	
 //----------Database----------//
 	static Connection con = null;
    	static Statement stmt = null;
@@ -167,32 +76,21 @@ public class Deliveries
         }
     }
     	
-    public static void close_db()
-    {
-    	try 
-		{
-    		if (con != null) 
-    		{
-    			con.close();
-                System.out.println("Database Closed");
-            }
-        } 
-        catch (SQLException sqle) 
-    	{
-        	System.out.println("Error: failed to close the database");
-        }
-    }
     
-   	public static void main(String[] args) throws DeliveryExceptionHandler
-    	{
-        	Scanner in = new Scanner(System.in);
-        	Deliveries deliveryDocket = new Deliveries(0, 0, "The Daily Mirror", "2008-04-07");
-        	init_db(); // Open the connection to the database
+    public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler, OrderExceptionHandler
+    {
+        Scanner in = new Scanner(System.in);
+        boolean on = true;
+        init_db(); // Open the connection to the database
         	
+        while (on) 
+        {
         	System.out.println("Choose an Option:");
-        	System.out.println("1. Add a new DeliveryDocket");
-        	System.out.println("2. Display all Deliveries");
-        	System.out.println("3. Exit");
+        	System.out.println("1.	Add a new DeliveryDocket");
+        	System.out.println("2.	Display all Deliveries");
+        	System.out.println("3.	Update Deliveries");
+        	System.out.println("4. 	Delete Delivery");
+        	System.out.println("5. 	Exit");
         	System.out.print(": ");
 
         	int choice = in.nextInt();
@@ -201,30 +99,52 @@ public class Deliveries
         	switch (choice) 
         	{
         		case 1:
-        			deliveryDocket.addDeliveryD();
-        			in.close();
+        			addDeliveryD(in);
         			break;
-
         		case 2:
-        			deliveryDocket.displayDeliveries();
-        			in.close();
+        			displayDeliveries();
         			break;
-
         		case 3:
-        			System.out.println("Exiting the program.");
-        			in.close();
-        			close_db();
+        			updateDeliveries();
+        			break;
+        		case 4:
+        			deleteDelivery(in);
+        			break;
+        		case 5:
+        			System.out.println("Exiting Delivery....");
+        			MainMenu.main(null);
         			return;
         				
         		default:
         		System.out.println("Error: Invalid Choice");
         	} 
-    	}
+        }
+        try 
+        {
+        	if (con != null) 
+        	{
+        		con.close(); // Close database connection
+                System.out.println("fafaf");
+            }
+            if (stmt != null) 
+            {
+                stmt.close(); // Close statement object
+            }
+            if (rs != null) 
+            {
+                rs.close(); // Close result set object
+            }
+        } 
+        catch (SQLException sqle) 
+        {
+        	System.out.println("Error: failed to close the database"); // Handle closing exceptions
+        }
+    }
+    	
         	
 //----------Create: Add DeliveryD----------//
-   	public void addDeliveryD() throws DeliveryExceptionHandler
+   	public static void addDeliveryD(Scanner in)
    	{
-   		Scanner in = new Scanner(System.in);
         try 
         {
         	// SQL insert statement for the delivery_docket table
@@ -254,7 +174,7 @@ public class Deliveries
 
             // Execute the update
             int rows = pstmt.executeUpdate();
-            in.close();
+            
             // Check if the insert was successful
             if (rows > 0) 
             {
@@ -265,17 +185,19 @@ public class Deliveries
             	System.out.println("Failed to add delivery docket.");
             }
             pstmt.close();
-            close_db();
         } 
         catch (SQLException sqle) 
         {
         	System.out.println("Error: " + sqle.getMessage());
-        }      	
+        }
+        catch (DeliveryExceptionHandler e) {
+            System.out.println("Error: " + e.getMessage()); // Handle custom exceptions
+        }
    }	
    	
    	
 //----------Read: Display Deliveries----------//
-    public void displayDeliveries() 
+    public static void displayDeliveries() 
     {
     	try 
     	{
@@ -290,13 +212,106 @@ public class Deliveries
             	System.out.println("Delivery Date: " + rs.getString("deliveryDate"));
             	System.out.println("-------------------------------");
     		}
-    		rs.close();
-            stmt.close();
-            close_db();
     	} 
     	catch (SQLException e) 
     	{
     			e.printStackTrace();
     	}
     }
+    
+    
+//----------Update: Change a Delivery info----------//
+    public static void updateDeliveries()
+    {
+    	
+    }
+    
+    
+//----------Delete: Remove a Delivery----------//
+    public static void deleteDelivery(Scanner in)
+    {
+    	try {
+        	// Ask the user for the date of the Docket to delete
+            System.out.println("Please Enter the Date of the DeliveryD to delete:");
+            String name = in.nextLine();
+            String deleteStr = "DELETE FROM delivery_docket WHERE DeliveryDate = ?";
+
+         // Prepare and execute the delete query
+            PreparedStatement pstmt = con.prepareStatement(deleteStr);
+            pstmt.setString(1, name);
+            int rows = pstmt.executeUpdate();
+
+            // Check if the delete was successful
+            if (rows > 0) {
+                System.out.println("Docket deleted successfully!"); // Success message
+            } else {
+                System.out.println("Docket not found or delete failed."); // Failure message
+            }
+            pstmt.close();
+        } catch (SQLException sqle) {
+            System.out.println("Error: " + sqle.getMessage());
+        }
+    }
+    
+    
+  //----------Validation----------//
+  	public static void validatecustId(int customerId) throws DeliveryExceptionHandler 
+  	{
+  	    if(customerId <= 0) 
+  	    {
+  	        throw new DeliveryExceptionHandler("CustomerId not specified or invalid");
+  	    }
+  	    if(customerId > 100) 
+  	    {
+  	        throw new DeliveryExceptionHandler("CustomerId exceeds Maximum");
+  	    }
+  	}
+  	
+  	public static void validateordId(int orderId) throws DeliveryExceptionHandler 
+  	{
+  	    if(orderId <= 0) 
+  	    {
+  	        throw new DeliveryExceptionHandler("OrderId not specified or invalid");
+  	    }
+  	    if(orderId > 100) 
+  	    {
+  	        throw new DeliveryExceptionHandler("OrderId exceeds Maximum");
+  	    }
+  	}
+  	
+  	public static void validatepubliName(String publicationName) throws DeliveryExceptionHandler
+  	{
+  		if (publicationName.isBlank() || publicationName.isEmpty())
+  		{
+  			throw new DeliveryExceptionHandler("Publication Name not specified or invalid");
+  		}
+  		else if (publicationName.length() < 5)
+  		{
+  			throw new DeliveryExceptionHandler("Publication Name does not meet minimum length requirements");
+  		}
+  		else if (publicationName.length() > 50)
+  		{
+  			throw new DeliveryExceptionHandler("Publication Name does not exceeds maximum length requirements");
+  		}
+  		
+  	}
+  	
+  	public static void validatedeliveryDate(String deliveryDate) throws DeliveryExceptionHandler 
+  	{
+  	    if (deliveryDate == null || deliveryDate.isEmpty()) 
+  	    {
+  	        throw new DeliveryExceptionHandler("Invoice date not specified or invalid");
+  	    }
+  	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+  	    dateFormat.setLenient(false); 
+  	    try 
+  	    {
+  	        dateFormat.parse(deliveryDate);
+  	    } catch (ParseException e) {
+  	        throw new DeliveryExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
+  	    }
+  	}
+  	
+  	
 }
+
