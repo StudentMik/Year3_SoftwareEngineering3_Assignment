@@ -8,4 +8,5 @@ import java.awt.event.ActionListener;
 public class MainMenuGUI extends JFrame
 {
 	//starting to create a simple gui for the program
+	
 }
