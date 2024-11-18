@@ -96,7 +96,7 @@ public class Invoice
        				displayInvoices();
        				break;
        			case 3:
-       				updateInvoice();
+       				updateInvoice(in);
        				break;
        			case 4:
        				deleteInvoice(in);
@@ -206,34 +206,140 @@ public class Invoice
     
     
 //----------Update: Change Invoice info----------//
-    public static void updateInvoice()
+    public static void updateInvoice(Scanner in)
     {
-    	
-    }
+    	try 
+    	{
+        	// Ask user for the publication name they want to modify
+            System.out.println("Please Enter the OrderId of the Invoice to Update:");
+            int orderId = in.nextInt();
+            in.nextLine();
+
+         // SQL query to find the publication by name
+            String selectStr = "SELECT * FROM Invoice WHERE OrderId = ?";
+
+         // Prepare statement to execute the query
+            PreparedStatement pstmtSelect = con.prepareStatement(selectStr);
+            pstmtSelect.setInt(1, orderId);
+
+            // Execute the select query
+            rs = pstmtSelect.executeQuery();
+
+            // Check if the publication exists
+            if (rs.next()) 
+            {
+            	// Display the current details of the publication
+                System.out.println("Invoice found ");
+                System.out.println("Current details - OrderId: " + rs.getString("OrderId")
+                                   + ", Date: " + rs.getString("InvoiceDate")
+                                   + ", Total: " + rs.getDouble("InvoiceTotal"));
+
+                // Ask the user if they want to change the publication name
+                System.out.println("Do you want to change this Invoice? (yes/no):");
+                String changeDate = in.nextLine();
+
+                if (changeDate.equalsIgnoreCase("yes")) 
+                {
+                	// Ask user for new OrderID
+                	System.out.println("Enter new OrderId (current: " + rs.getInt("OrderId") + "): ");
+                	int neworderId = in.nextInt();
+                	validateordId(neworderId);
+                	in.nextLine();
+                	
+                	// SQL query to update the publication name
+                    String updateOrderIdStr = "UPDATE invoice SET OrderId = ? WHERE OrderId = ?";
+                    PreparedStatement pstmtUpdateOrderId = con.prepareStatement(updateOrderIdStr);
+                    pstmtUpdateOrderId.setInt(1, neworderId); // Set new OrderId
+                    pstmtUpdateOrderId.setInt(2, orderId); // Set old OrderId
+                    
+                    // Execute the update query for changing the name
+                    int rows = pstmtUpdateOrderId.executeUpdate();
+                    if (rows > 0) 
+                    {
+                    	orderId= neworderId;
+                    }
+                    pstmtUpdateOrderId.close();
+                	// Ask user for new Invoice Date
+                	System.out.println("Enter new Date (current: " + rs.getString("InvoiceDate") + "):");
+                	String newInvoiceDate = in.nextLine();
+                	validateinvoiceDate(newInvoiceDate);
+                	
+                	// Ask user for new Invoice Total
+                	System.out.println("Enter new Total (current: " + rs.getDouble("InvoiceTotal") + "):");
+                	double newinvoiceTotal = in.nextDouble();
+                	in.nextLine();
+                
+                	// SQL update statement to change the price and schedule
+                	String updateStr = "UPDATE invoice SET OrderId = ?, InvoiceDate = ?, InvoiceTotal = ?, Where OrderId = ? ";
+
+                	// Prepare the update statement
+                	PreparedStatement pstmtUpdate = con.prepareStatement(updateStr);
+                	pstmtUpdate.setInt(1, neworderId);
+                	pstmtUpdate.setString(2, newInvoiceDate);
+                	pstmtUpdate.setDouble(3, newinvoiceTotal);
+
+                	// Execute the update
+                	int rows1 = pstmtUpdate.executeUpdate();
+
+                	// Check if the update was successful
+                	if (rows1 > 0) 
+                	{
+                		System.out.println("Invoice updated successfully!");// Success message
+                	} 
+                	else 
+                	{
+                		System.out.println("Failed to update Invoice.");// Failure message
+                	}
+                	pstmtUpdate.close(); // Close the prepared statement
+                } 
+                else 
+                {
+                	System.out.println("Invoice with date '" + orderId + "' not found."); // If publication does not exist
+                }
+            }   
+            } 
+            catch (SQLException sqle) 
+            {
+            	System.out.println("Error: " + sqle.getMessage()); // Handle SQL exceptions
+            } 
+            catch (InvoiceExceptionHandler e) 
+            {
+            	System.out.println("Error: " + e.getMessage());
+            }
+    
+        }
     
     
 //----------Delete: Remove an Invoice----------//
     public static void deleteInvoice(Scanner in)
     {
-    	try {
+    	try 
+    	{
         	// Ask the user for the ID of the Invoice to delete
-            System.out.println("Please Enter the orderId of the Inovice to delete:");
-            String name = in.nextLine();
+            System.out.println("Please Enter the orderId of the Invoice to delete:");
+            int orderId = in.nextInt();
+            in.nextLine();
+            
             String deleteStr = "DELETE FROM invoice WHERE OrderId = ?";
 
-         // Prepare and execute the delete query
+            // Prepare and execute the delete query
             PreparedStatement pstmt = con.prepareStatement(deleteStr);
-            pstmt.setString(1, name);
+            pstmt.setInt(1, orderId);
             int rows = pstmt.executeUpdate();
 
             // Check if the delete was successful
-            if (rows > 0) {
+            if (rows > 0) 
+            {
                 System.out.println("Invoice deleted successfully!"); // Success message
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Invoice not found or delete failed."); // Failure message
             }
             pstmt.close();
-        } catch (SQLException sqle) {
+        } 
+    	catch (SQLException sqle) 
+    	{
             System.out.println("Error: " + sqle.getMessage());
         }
     }
