@@ -163,16 +163,36 @@ public class Customer
         }
     }
 
-    //-------Create a New Customer--------//
+    //-------Update a New Customer--------//
     public static void updateCustomer(Connection con, Scanner in)
     {
         return;
     }
 
-    //-------Create a New Customer--------//
+    //-------Delete a New Customer--------//
+ // Delete a customer from the database
     public static void deleteCustomer(Connection con, Scanner in)
     {
-        return;
+        try
+        {
+            System.out.print("Enter the Customer ID to delete: ");
+            int id = in.nextInt();
+
+            String sql = "DELETE FROM customers WHERE CustomerId = ?";
+
+            try (PreparedStatement pstmt = con.prepareStatement(sql))
+            {
+                pstmt.setInt(1, id);
+
+                int rows = pstmt.executeUpdate();
+
+                System.out.println(rows > 0 ? "Customer deleted successfully!" : "Customer not found or delete failed.");
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
     }
 
     //---------Main Program-------//
