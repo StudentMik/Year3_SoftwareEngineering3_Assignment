@@ -3,17 +3,17 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Publications {
-    static Connection con = null;// Database connection object
-    static Statement stmt = null;// Statement object for executing queries
-    static ResultSet rs = null;// ResultSet object for handling query results
+    static Connection con = null;     // Database connection object
+    static Statement stmt = null;  // Statement object for executing queries
+    static ResultSet rs = null;      // ResultSet object for handling query results
 
- // Main method where the program execution starts
+ //------------Main method where the program execution starts---------//
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in); // Scanner for user input
         init_db(); // Open the connection to the database
         boolean running = true;// Flag to keep the program running in a loop
 
-     // Loop to display the menu and handle user input
+     //----------Loop to display the menu and handle user input-------------//
         while (running) {
             System.out.println("Choose an Option:");
             System.out.println("1. Add a new publication");
@@ -25,7 +25,7 @@ public class Publications {
             int choice = in.nextInt(); // Read user's choice
             in.nextLine();  // Consume newline character left after integer input
 
-            // Handle user's choice using switch statement
+            //------Handle user's choice using switch statement-----//
             switch (choice) {
                 case 1:
                     addPublication(in); // Call addPublication method to add a new publication
@@ -48,7 +48,7 @@ public class Publications {
             }
         }
 
-        // Close the database connection
+        //----Close the database connection----//
         try {
             if (con != null) {
                 con.close(); // Close database connection
@@ -119,7 +119,7 @@ public class Publications {
         }
     }
 
- // Method to display all publications from the database
+ //----------Method to display all publications from the database------------//
     public static void displayPublications() {
         try {
         	// SQL query to select all publications from the database
@@ -143,7 +143,7 @@ public class Publications {
         }
     }
 
- // Method to modify an existing publication's details
+ //---------------Method to modify an existing publication's details----------------//
     public static void modifyPublication(Scanner in) {
         try {
         	// Ask user for the publication name they want to modify
@@ -239,7 +239,7 @@ public class Publications {
         }
     }
 
- // Method to delete a publication from the database
+ //---------------Method to delete a publication from the database-----------//
     public static void deletePublication(Scanner in) {
         try {
         	// Ask the user for the name of the publication to delete
@@ -268,6 +268,7 @@ public class Publications {
         }
     }
 
+
     // Validate schedule input to ensure it's valid
     public static void validateschedule(String schedule) throws PublicationExceptionHandler {
         if (!(schedule.equalsIgnoreCase("Daily") || schedule.equalsIgnoreCase("Weekly") || schedule.equalsIgnoreCase("Monthly"))) {
@@ -277,7 +278,7 @@ public class Publications {
     
  // Method to validate the publication name
     public static void validatePublicationName(String name) throws PublicationExceptionHandler {
-        if (name.length() < 4 || name.length() > 20 || !name.matches("[a-zA-Z]+")) {
+        if (name.length() < 4 || name.length() > 20 || !name.matches("[a-zA-Z ]+")) {
             throw new PublicationExceptionHandler("Invalid publication name. Name must be 4-20 characters and contain only letters.");
         }
     }
