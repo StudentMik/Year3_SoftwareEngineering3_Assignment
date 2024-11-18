@@ -23,7 +23,7 @@ public class MainMenu
 	       	int choice = in.nextInt();
 	       	in.nextLine();
 
-	        switch (choice) 
+	        switch (choice)
 	       	{
 	       		case 1:
 	       			Customer.main(null);
