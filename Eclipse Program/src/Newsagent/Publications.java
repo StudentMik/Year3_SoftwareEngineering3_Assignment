@@ -64,7 +64,7 @@ public class Publications {
         }
     }
 
- // Method to initialize the database connection
+ // -----------Method to initialize the database connection------------------//
     public static void init_db() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");// Load MySQL JDBC driver
@@ -76,15 +76,17 @@ public class Publications {
         }
     }
 
- // Method to add a new publication to the database
+ // --------------Method to add a new publication to the database--------------//
     public static void addPublication(Scanner in) {
         try {
         	// Prompt user for publication details
             System.out.println("Please Enter the Publication Name:");
             String name = in.nextLine(); // Read publication name
+            validatePublicationName(name);
 
             System.out.println("Please Enter the Publication Price:");
             double price = in.nextDouble(); // Read publication price
+            validatePrice(price);
             in.nextLine(); // Consume the newline character
 
             System.out.println("Please Enter the Schedule:");
@@ -147,6 +149,7 @@ public class Publications {
         	// Ask user for the publication name they want to modify
             System.out.println("Please Enter the Name of the publication to modify:");
             String name = in.nextLine();
+            validatePublicationName(name);
 
          // SQL query to find the publication by name
             String selectStr = "SELECT * FROM publication WHERE PublicationName = ?";
@@ -174,6 +177,7 @@ public class Publications {
                 	// If user wants to change the name, ask for the new name
                     System.out.println("Enter the new publication name:");
                     String newName = in.nextLine();
+                    validatePublicationName(newName);
 
                  // SQL query to update the publication name
                     String updateNameStr = "UPDATE publication SET PublicationName = ? WHERE PublicationName = ?";
@@ -196,6 +200,7 @@ public class Publications {
                 System.out.println("Enter new price (current: " + rs.getDouble("PublicationPrice") + "):");
                 double newPrice = in.nextDouble();
                 in.nextLine(); // Consume the newline character
+                validatePrice(newPrice);
 
                 // Prompt for new schedule
                 System.out.println("Enter new schedule (current: " + rs.getString("Schedule") + "):");
@@ -267,6 +272,20 @@ public class Publications {
     public static void validateschedule(String schedule) throws PublicationExceptionHandler {
         if (!(schedule.equalsIgnoreCase("Daily") || schedule.equalsIgnoreCase("Weekly") || schedule.equalsIgnoreCase("Monthly"))) {
             throw new PublicationExceptionHandler("Invalid schedule input. Daily, Weekly, or Monthly expected");
+        }
+    }
+    
+ // Method to validate the publication name
+    public static void validatePublicationName(String name) throws PublicationExceptionHandler {
+        if (name.length() < 4 || name.length() > 20 || !name.matches("[a-zA-Z]+")) {
+            throw new PublicationExceptionHandler("Invalid publication name. Name must be 4-20 characters and contain only letters.");
+        }
+    }
+
+ // Method to validate the publication price
+    public static void validatePrice(double price) throws PublicationExceptionHandler {
+        if (price < 0) {
+            throw new PublicationExceptionHandler("Invalid price. Price cannot be negative.");
         }
     }
 }
