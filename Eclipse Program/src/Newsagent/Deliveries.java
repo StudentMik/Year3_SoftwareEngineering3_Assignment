@@ -141,7 +141,7 @@ public class Deliveries
         try 
         {
         	// SQL insert statement for the delivery_docket table
-            String str = "INSERT INTO delivery_docket (DeliveryArea, DeliveryDate, OrderQuantity, DeliveryValue) VALUES (?, ?, ?, ?)";
+            String str = "INSERT INTO delivery_docket (DeliveryArea, DeliveryDate, DeliveryQuantity, DeliveryValue) VALUES (?, ?, ?, ?)";
 
             // Get delivery docket details from the user
             System.out.println("Please Enter the Delivery Area: ");
@@ -203,7 +203,7 @@ public class Deliveries
             {
             	System.out.println("Delivery Area: " + rs.getInt("deliveryArea"));
             	System.out.println("Delivery Date: " + rs.getString("deliveryDate"));
-            	System.out.println("Delivery Quantity: " + rs.getInt("orderQuantity"));
+            	System.out.println("Delivery Quantity: " + rs.getInt("DeliveryQuantity"));
             	System.out.println("Delivery Value: €" + rs.getDouble("deliveryValue"));
             	System.out.println("-------------------------------");
     		}
@@ -227,13 +227,16 @@ public class Deliveries
     {
     	try {
         	// Ask the user for the date of the Docket to delete
-            System.out.println("Please Enter the Date of the DeliveryDocket to delete:");
-            String name = in.nextLine();
-            String deleteStr = "DELETE FROM delivery_docket WHERE DeliveryDate = ?";
+            System.out.println("Please Enter the Date of the DeliveryDocket to delete: ");
+            String deliveryDate = in.nextLine();
+            System.out.println("Please Enter the Area of the DeliveryDocket to delete: ");
+            int deliveryArea = in.nextInt();
+            String deleteStr = "DELETE FROM delivery_docket WHERE DeliveryDate = ? AND DeliveryArea LIKE ?";
 
          // Prepare and execute the delete query
             PreparedStatement pstmt = con.prepareStatement(deleteStr);
-            pstmt.setString(1, name);
+            pstmt.setString(1, deliveryDate);
+            pstmt.setInt(2, deliveryArea);
             int rows = pstmt.executeUpdate();
 
             // Check if the delete was successful
