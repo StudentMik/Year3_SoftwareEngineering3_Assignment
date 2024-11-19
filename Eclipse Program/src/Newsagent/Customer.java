@@ -5,13 +5,13 @@ import java.sql.*;
 
 public class Customer
 {
-    //-----------Customer Information Variables---------//
+    //-------------------------------------------Customer Information Variables-----------------------------------------//
     private int id;
     private String name;
     private String address;
     private String phoneNumber;
 
-    //-------Constructor to Create a New Customer------//
+    //---------------------------------------Constructor to Create a New Customer--------------------------------------//
     public Customer(String custName, String custAddress, String custPhone) throws CustomerExceptionHandler
     {
         validateName(custName);
@@ -24,7 +24,7 @@ public class Customer
         this.phoneNumber = custPhone;
     }
 
-    //-------Methods to Get and Set Customer Info-------//
+    //---------------------------------------Methods to Get and Set Customer Info------------------------------------//
     public int getId()
     {
         return id;
@@ -65,7 +65,7 @@ public class Customer
         this.phoneNumber = phoneNumber;
     }
 
-    //--------Methods to Validate Customer Info-------//
+    //----------------------------------------Methods to Validate Customer Info---------------------------------------//
     private void validateName(String custName) throws CustomerExceptionHandler
     {
         if (custName == null || custName.isBlank() || custName.length() < 2 || custName.length() > 50)
@@ -94,7 +94,7 @@ public class Customer
         }
     }
 
-    //-------Add Customer to Database--------//
+    //---------------------------------------Add Customer to Database----------------------------------------//
     public void addToDatabase(Connection con) throws SQLException
     {
         String str = "INSERT INTO customers (Name, Address, ContactNo) VALUES (?, ?, ?)";
@@ -116,7 +116,7 @@ public class Customer
         }
     }
 
-    //--------Read Customers from Database-------//
+    //----------------------------------------Read Customers from Database---------------------------------------//
     public static void readCustomer(Connection con) throws SQLException
     {
         String query = "SELECT * FROM customers";
@@ -137,7 +137,7 @@ public class Customer
         }
     }
 
-    //-------Create a New Customer--------//
+    //---------------------------------------Create a New Customer----------------------------------------//
     public static void createCustomer(Connection con, Scanner in)
     {
         try
@@ -163,13 +163,13 @@ public class Customer
         }
     }
 
-    //-------Update a New Customer--------//
+    //-----------------------------Update a New Customer--------------------------------------------//
     public static void updateCustomer(Connection con, Scanner in)
     {
         return;
     }
 
-    //-------Delete a New Customer--------//
+    //---------------------------------------Delete a New Customer----------------------------------------//
  // Delete a customer from the database
     public static void deleteCustomer(Connection con, Scanner in)
     {
@@ -195,7 +195,7 @@ public class Customer
         }
     }
 
-    //---------Main Program-------//
+    //-----------------------------------------Main Program---------------------------------------//
     public static void main(String[] args) throws CustomerExceptionHandler, DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, OrderExceptionHandler
     {
         Scanner in = new Scanner(System.in);
@@ -272,7 +272,7 @@ public class Customer
         }
     }
 
-    //---------Database Connection--------//
+    //-----------------------------------------Database Connection----------------------------------------//
     public static Connection init_db() throws SQLException
     {
         try
@@ -288,7 +288,7 @@ public class Customer
     }
 }
 
-//---------Customer Exception Handler---------//
+//-----------------------------------------Customer Exception Handler-----------------------------------------//
 class CustomerExceptionHandler extends Exception
 {
     public CustomerExceptionHandler(String message)
