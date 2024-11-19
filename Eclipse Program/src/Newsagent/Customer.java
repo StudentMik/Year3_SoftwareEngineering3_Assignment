@@ -72,7 +72,7 @@ public class Customer
         {
             throw new CustomerExceptionHandler("Name must be between 2 and 50 letters.");
         }
-        if (!custName.matches("[a-zA-Z]+"))
+        if (!custName.matches("[a-zA-Z]+ "))
         {
             throw new CustomerExceptionHandler("Name must only have letters.");
         }
@@ -163,10 +163,58 @@ public class Customer
         }
     }
 
-    //-----------------------------Update a New Customer--------------------------------------------//
+  //-----------------------------Update Customer Information--------------------------------------------//
+    //update a customer
     public static void updateCustomer(Connection con, Scanner in)
     {
-        return;
+        try
+        {
+            System.out.print("Enter the Customer ID to update: ");
+            int id = in.nextInt();
+            in.nextLine(); // Clear the input buffer
+
+            // Check if the customer exists
+            String selectQuery = "SELECT * FROM customers WHERE CustomerId = ?";
+            PreparedStatement pstmtSelect = con.prepareStatement(selectQuery);
+            pstmtSelect.setInt(1, id);
+            ResultSet rs = pstmtSelect.executeQuery();
+
+            if (!rs.next())
+            {
+                System.out.println("No customer found with ID: " + id);
+                return;
+            }
+
+            // Prompt user for new details
+            System.out.print("Enter new Name: ");
+            String newName = in.nextLine();
+
+            System.out.print("Enter new Address: ");
+            String newAddress = in.nextLine();
+
+            System.out.print("Enter new Contact Number: ");
+            String newContactNo = in.nextLine();
+
+            // Update the customer details in the database
+            String updateQuery = "UPDATE customers SET Name = ?, Address = ?, ContactNo = ? WHERE CustomerId = ?";
+            PreparedStatement pstmtUpdate = con.prepareStatement(updateQuery);
+            pstmtUpdate.setString(1, newName);
+            pstmtUpdate.setString(2, newAddress);
+            pstmtUpdate.setString(3, newContactNo);
+            pstmtUpdate.setInt(4, id);
+
+            int rows = pstmtUpdate.executeUpdate();
+            System.out.println(rows > 0 ? "Customer updated successfully!" : "Failed to update customer.");
+
+            // Close resources
+            pstmtSelect.close();
+            pstmtUpdate.close();
+
+        }
+        catch (SQLException e)
+        {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
     }
 
     //---------------------------------------Delete a New Customer----------------------------------------//
