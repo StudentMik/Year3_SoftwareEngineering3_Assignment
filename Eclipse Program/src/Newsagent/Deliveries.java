@@ -5,61 +5,54 @@ import java.util.Scanner;
 
 public class Deliveries
 {
-	//private int driverID; int deliveryDArea; //1-24 String deliveryAddress;
+	private int deliveryArea; //1-24
 	private String deliveryDate;
-	private int customerId;
-	private int orderId;
-	private String publicationName;  
+	private int orderQuantity;
+	private double deliveryValue;
 	
 
 //----------Constructor----------//
-	public Deliveries(int customerId, int orderId, String publicationName, String deliveryDate) 
+	public Deliveries(int deliveryArea, String deliveryDate, int orderQuantity, double deliveryValue) 
 	{
-		this.customerId = customerId;
-		this.orderId = orderId;
-		this.publicationName = publicationName;
+		this.deliveryArea = deliveryArea;
 		this.deliveryDate = deliveryDate;
+		this.orderQuantity = orderQuantity;
+		this.deliveryValue = deliveryValue;
 	}
 
 	
 //----------Getters & Setters----------//
-	public String getDeliveryDate() 
-	{
-		return deliveryDate;
+	public int getDeliveryArea() {
+		return deliveryArea;
 	}
-	public void setDeliveryDate(String deliveryDate) 
-	{
-		this.deliveryDate = deliveryDate;
-	}
-	
-	public int getCustomerId() 
-	{
-		return customerId;
-	}
-	public void setCustomerId(int customerId) 
-	{
-		this.customerId = customerId;
-	}
-	public int getOrderId() 
-	{
-		return orderId;
-	}
-	public void setOrderId(int orderId) 
-	{
-		this.orderId = orderId;
-	}
-	
-	public String getPublicationName() {
-		return publicationName;
-	}
-	public void setPublicationName(String publicationName) 
-	{
-		this.publicationName = publicationName;
+	public void setDeliveryArea(int deliveryArea) {
+		this.deliveryArea = deliveryArea;
 	}
 
+	public String getDeliveryDate() {
+		return deliveryDate;
+	}
+	public void setDeliveryDate(String deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+	public int getOrderQuantity() {
+		return orderQuantity;
+	}
+	public void setOrderQuantity(int orderQuantity) {
+		this.orderQuantity = orderQuantity;
+	}
+
+	public double getDeliveryValue() {
+		return deliveryValue;
+	}
+	public void setDeliveryValue(double deliveryValue) {
+		this.deliveryValue = deliveryValue;
+	}
+	
 //----------Database----------//
 	static Connection con = null;
-   	static Statement stmt = null;
+	static Statement stmt = null;
    	static ResultSet rs = null;
 
    	public static void init_db() 
@@ -148,29 +141,31 @@ public class Deliveries
         try 
         {
         	// SQL insert statement for the delivery_docket table
-            String str = "INSERT INTO delivery_docket (CustomerId, OrderId, PublicationName, DeliveryDate) VALUES (?, ?, ?, ?)";
+            String str = "INSERT INTO delivery_docket (DeliveryArea, DeliveryDate, OrderQuantity, DeliveryValue) VALUES (?, ?, ?, ?)";
 
             // Get delivery docket details from the user
-            System.out.println("Please Enter the Customer ID:");
-            int customerId = in.nextInt();
-            validatecustId(customerId);
-            System.out.println("Please Enter the Order ID:");
-            int orderId = in.nextInt();
-            validateordId(orderId);
-            in.nextLine(); // Consume the newline left-over
-            System.out.println("Please Enter the Publication Name:");
-            String publicationName = in.nextLine();
-            validatepubliName(publicationName);
+            System.out.println("Please Enter the Delivery Area: ");
+            int deliveryArea = in.nextInt();
+            validatedeliveryArea(deliveryArea);
+            in.nextLine();
             System.out.println("Please Enter the Delivery Date (YYYY-MM-DD):");
             String deliveryDate = in.nextLine();
             validatedeliveryDate(deliveryDate);
+            System.out.println("Please Enter the Delivery Quantity: ");
+            int orderQuantity = in.nextInt();
+            validatedeliveryQuantity(orderQuantity);
+            in.nextLine();
+            System.out.println("Please Enter the Delivery Value: ");
+            double deliveryValue = in.nextDouble();
+            validatedeliveryValue(deliveryValue);
+            in.nextLine();
             	
             // Prepare the statement
             PreparedStatement pstmt = con.prepareStatement(str);
-            pstmt.setInt(1, customerId);
-            pstmt.setInt(2, orderId);
-            pstmt.setString(3, publicationName);
-            pstmt.setString(4, deliveryDate);
+            pstmt.setInt(1, deliveryArea);
+            pstmt.setString(2, deliveryDate);
+            pstmt.setInt(3, orderQuantity);
+            pstmt.setDouble(4, deliveryValue);
 
             // Execute the update
             int rows = pstmt.executeUpdate();
@@ -206,10 +201,10 @@ public class Deliveries
             rs = stmt.executeQuery(query);
             while (rs.next()) 
             {
-            	System.out.println("Customer Id: " + rs.getInt("customerId"));
-            	System.out.println("Order Id: " + rs.getInt("orderId"));
-            	System.out.println("Publication Name: " + rs.getString("publicationName"));
+            	System.out.println("Delivery Area: " + rs.getInt("deliveryArea"));
             	System.out.println("Delivery Date: " + rs.getString("deliveryDate"));
+            	System.out.println("Delivery Quantity: " + rs.getInt("orderQuantity"));
+            	System.out.println("Delivery Value: €" + rs.getDouble("deliveryValue"));
             	System.out.println("-------------------------------");
     		}
     	} 
@@ -232,7 +227,7 @@ public class Deliveries
     {
     	try {
         	// Ask the user for the date of the Docket to delete
-            System.out.println("Please Enter the Date of the DeliveryD to delete:");
+            System.out.println("Please Enter the Date of the DeliveryDocket to delete:");
             String name = in.nextLine();
             String deleteStr = "DELETE FROM delivery_docket WHERE DeliveryDate = ?";
 
@@ -255,52 +250,23 @@ public class Deliveries
     
     
   //----------Validation----------//
-  	public static void validatecustId(int customerId) throws DeliveryExceptionHandler 
+  	public static void validatedeliveryArea(int deliveryArea) throws DeliveryExceptionHandler 
   	{
-  	    if(customerId <= 0) 
+  	    if(deliveryArea <= 0) 
   	    {
-  	        throw new DeliveryExceptionHandler("CustomerId not specified or invalid");
+  	        throw new DeliveryExceptionHandler("Delivery Area not specified or invalid");
   	    }
-  	    if(customerId > 100) 
+  	    if(deliveryArea > 25) 
   	    {
-  	        throw new DeliveryExceptionHandler("CustomerId exceeds Maximum");
+  	        throw new DeliveryExceptionHandler("Delivery Area exceeds Maximum");
   	    }
-  	}
-  	
-  	public static void validateordId(int orderId) throws DeliveryExceptionHandler 
-  	{
-  	    if(orderId <= 0) 
-  	    {
-  	        throw new DeliveryExceptionHandler("OrderId not specified or invalid");
-  	    }
-  	    if(orderId > 100) 
-  	    {
-  	        throw new DeliveryExceptionHandler("OrderId exceeds Maximum");
-  	    }
-  	}
-  	
-  	public static void validatepubliName(String publicationName) throws DeliveryExceptionHandler
-  	{
-  		if (publicationName.isBlank() || publicationName.isEmpty())
-  		{
-  			throw new DeliveryExceptionHandler("Publication Name not specified or invalid");
-  		}
-  		else if (publicationName.length() < 5)
-  		{
-  			throw new DeliveryExceptionHandler("Publication Name does not meet minimum length requirements");
-  		}
-  		else if (publicationName.length() > 50)
-  		{
-  			throw new DeliveryExceptionHandler("Publication Name does not exceeds maximum length requirements");
-  		}
-  		
   	}
   	
   	public static void validatedeliveryDate(String deliveryDate) throws DeliveryExceptionHandler 
   	{
   	    if (deliveryDate == null || deliveryDate.isEmpty()) 
   	    {
-  	        throw new DeliveryExceptionHandler("Invoice date not specified or invalid");
+  	        throw new DeliveryExceptionHandler("Delivery date not specified or invalid");
   	    }
   	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
   	    dateFormat.setLenient(false); 
@@ -308,10 +274,24 @@ public class Deliveries
   	    {
   	        dateFormat.parse(deliveryDate);
   	    } catch (ParseException e) {
-  	        throw new DeliveryExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
+  	        throw new DeliveryExceptionHandler("Delivery date is invalid, expected format is yyyy-mm-dd");
   	    }
   	}
   	
+  	public static void validatedeliveryQuantity(int deliveryQuantity) throws DeliveryExceptionHandler 
+  	{
+  	    if(deliveryQuantity <= 0) 
+  	    {
+  	        throw new DeliveryExceptionHandler("Delivery Quantity not specified or invalid");
+  	    }
+  	}
   	
+  	public static void validatedeliveryValue(double deliveryValue) throws DeliveryExceptionHandler 
+  	{
+  		if (deliveryValue < 0) 
+  		{
+  			throw new DeliveryExceptionHandler("Total cannot be negative");
+  		}
+  	}
 }
 
