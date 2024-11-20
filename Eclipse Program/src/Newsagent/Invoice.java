@@ -11,7 +11,7 @@ public class Invoice
 	private double invoiceTotal; 
 	
 	
-//-----------Constructor----------//
+//--------------------Constructor--------------------//
 	public Invoice(int orderId, String invoiceDate, double invoiceTotal) throws InvoiceExceptionHandler 
 	{
 		this.orderId = orderId;
@@ -20,7 +20,7 @@ public class Invoice
 	}
 
 	
-//-----------Getters & Setters----------//
+//--------------------Getters & Setters--------------------//
 	public int getOrderId() 
 	{
 		return orderId;
@@ -49,7 +49,7 @@ public class Invoice
 	}
 	
 	
-//----------Database----------//
+//----------Database Connection--------------------//
     static Connection con = null;
     static Statement stmt = null;
     static ResultSet rs = null;
@@ -68,6 +68,8 @@ public class Invoice
         }
     }
     
+    
+//--------------------Main--------------------//
    	public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler, OrderExceptionHandler
 	{
         Scanner in = new Scanner(System.in);
@@ -133,7 +135,7 @@ public class Invoice
     }
 
 
-//----------Create: New Invoice----------//
+//--------------------CREATE: Add an Invoice to the Database--------------------//
    	public static void addInvoice(Scanner in)
     {
         try 
@@ -182,7 +184,7 @@ public class Invoice
     }
    	
    	
-//----------Read: Display Invoices----------//
+//--------------------READ: Display Invoices from the Database--------------------//
     public static void displayInvoices() 
     {
     	try 
@@ -192,9 +194,10 @@ public class Invoice
             rs = stmt.executeQuery(query);
             while (rs.next()) 
             {
+            	System.out.println("Invoie Id: " + rs.getInt("invoiceId"));
             	System.out.println("Order Id: " + rs.getInt("orderId"));
             	System.out.println("Invoice Date: " + rs.getString("invoiceDate"));
-            	System.out.println("Invoice Total: " + rs.getDouble("invoiceTotal"));
+            	System.out.println("Invoice Total: €" + rs.getDouble("invoiceTotal"));
             	System.out.println("-------------------------------");
     		}
     	} 
@@ -205,78 +208,67 @@ public class Invoice
     }
     
     
-//----------Update: Change Invoice info----------//
+//--------------------UPDATE: Change an Invoice in the Database--------------------//
     public static void updateInvoice(Scanner in)
     {
     	try 
     	{
-        	// Ask user for the publication name they want to modify
-            System.out.println("Please Enter the OrderId of the Invoice to Update:");
-            int orderId = in.nextInt();
+        	// Ask user for the Invoice they want to modify
+            System.out.println("Please Enter the InvoiceId of the Invoice to Update:");
+            int invoiceId = in.nextInt();
             in.nextLine();
 
-         // SQL query to find the publication by name
-            String selectStr = "SELECT * FROM Invoice WHERE OrderId = ?";
+         // SQL query to find the Invoice by ID
+            String selectStr = "SELECT * FROM Invoice WHERE InvoiceId = ?";
 
          // Prepare statement to execute the query
             PreparedStatement pstmtSelect = con.prepareStatement(selectStr);
-            pstmtSelect.setInt(1, orderId);
+            pstmtSelect.setInt(1, invoiceId);
 
             // Execute the select query
             rs = pstmtSelect.executeQuery();
 
-            // Check if the publication exists
+            // Check if the Invoice exists
             if (rs.next()) 
             {
-            	// Display the current details of the publication
+            	// Display the current details of the Invoice
                 System.out.println("Invoice found ");
-                System.out.println("Current details - OrderId: " + rs.getString("OrderId")
+                System.out.println("Current details - InvoiceId: " + rs.getInt("InvoiceId")
+                				   + ", OrderId: " + rs.getInt("OrderId")
                                    + ", Date: " + rs.getString("InvoiceDate")
-                                   + ", Total: " + rs.getDouble("InvoiceTotal"));
+                                   + ", Total: €" + rs.getDouble("InvoiceTotal"));
 
-                // Ask the user if they want to change the publication name
+                // Ask the user if they want to change the Invoice
                 System.out.println("Do you want to change this Invoice? (yes/no):");
-                String changeDate = in.nextLine();
+                String changeInvoice = in.nextLine();
 
-                if (changeDate.equalsIgnoreCase("yes")) 
+                if (changeInvoice.equalsIgnoreCase("yes")) 
                 {
                 	// Ask user for new OrderID
                 	System.out.println("Enter new OrderId (current: " + rs.getInt("OrderId") + "): ");
-                	int neworderId = in.nextInt();
-                	validateordId(neworderId);
+                	int newOrderId = in.nextInt();
+                	validateordId(newOrderId);
                 	in.nextLine();
-                	
-                	// SQL query to update the publication name
-                    String updateOrderIdStr = "UPDATE invoice SET OrderId = ? WHERE OrderId = ?";
-                    PreparedStatement pstmtUpdateOrderId = con.prepareStatement(updateOrderIdStr);
-                    pstmtUpdateOrderId.setInt(1, neworderId); // Set new OrderId
-                    pstmtUpdateOrderId.setInt(2, orderId); // Set old OrderId
-                    
-                    // Execute the update query for changing the name
-                    int rows = pstmtUpdateOrderId.executeUpdate();
-                    if (rows > 0) 
-                    {
-                    	orderId= neworderId;
-                    }
-                    pstmtUpdateOrderId.close();
+        
                 	// Ask user for new Invoice Date
                 	System.out.println("Enter new Date (current: " + rs.getString("InvoiceDate") + "):");
                 	String newInvoiceDate = in.nextLine();
                 	validateinvoiceDate(newInvoiceDate);
                 	
                 	// Ask user for new Invoice Total
-                	System.out.println("Enter new Total (current: " + rs.getDouble("InvoiceTotal") + "):");
+                	System.out.println("Enter new Total (current: €" + rs.getDouble("InvoiceTotal") + "):");
                 	double newinvoiceTotal = in.nextDouble();
                 	in.nextLine();
                 
-                	// SQL update statement to change the price and schedule
-                	String updateStr = "UPDATE invoice SET OrderId = ?, InvoiceDate = ?, InvoiceTotal = ?, Where OrderId = ? ";
+                	// SQL update statement to Update the Invoice
+                	String updateStr = "UPDATE invoice SET OrderId = ?, InvoiceDate = ?, InvoiceTotal = ? Where InvoiceId = ?";
 
                 	// Prepare the update statement
                 	PreparedStatement pstmtUpdate = con.prepareStatement(updateStr);
-                	pstmtUpdate.setInt(1, neworderId);
+                	pstmtUpdate.setInt(1, newOrderId);
                 	pstmtUpdate.setString(2, newInvoiceDate);
                 	pstmtUpdate.setDouble(3, newinvoiceTotal);
+                	pstmtUpdate.setInt(4, invoiceId);
 
                 	// Execute the update
                 	int rows1 = pstmtUpdate.executeUpdate();
@@ -294,37 +286,36 @@ public class Invoice
                 } 
                 else 
                 {
-                	System.out.println("Invoice with date '" + orderId + "' not found."); // If publication does not exist
+                	System.out.println("Invoice with Id '" + invoiceId + "' not found."); // If Invoice does not exist
                 }
             }   
-            } 
-            catch (SQLException sqle) 
-            {
-            	System.out.println("Error: " + sqle.getMessage()); // Handle SQL exceptions
-            } 
-            catch (InvoiceExceptionHandler e) 
-            {
-            	System.out.println("Error: " + e.getMessage());
-            }
-    
+    	} 
+        catch (SQLException sqle) 
+        {
+        	System.out.println("Error: " + sqle.getMessage()); // Handle SQL exceptions
+        } 
+        catch (InvoiceExceptionHandler e) 
+        {
+            System.out.println("Error: " + e.getMessage());
         }
+    }
     
     
-//----------Delete: Remove an Invoice----------//
+//--------------------DELETE: Remove an Invoice from the Database--------------------//
     public static void deleteInvoice(Scanner in)
     {
     	try 
     	{
         	// Ask the user for the ID of the Invoice to delete
-            System.out.println("Please Enter the orderId of the Invoice to delete:");
-            int orderId = in.nextInt();
+            System.out.println("Please Enter the Id of the Invoice to delete:");
+            int invoiceId = in.nextInt();
             in.nextLine();
             
-            String deleteStr = "DELETE FROM invoice WHERE OrderId = ?";
+            String deleteStr = "DELETE FROM invoice WHERE InvoiceId = ?";
 
             // Prepare and execute the delete query
             PreparedStatement pstmt = con.prepareStatement(deleteStr);
-            pstmt.setInt(1, orderId);
+            pstmt.setInt(1, invoiceId);
             int rows = pstmt.executeUpdate();
 
             // Check if the delete was successful
@@ -345,7 +336,7 @@ public class Invoice
     }
     
     
-//----------Validation----------//
+  //--------------------Validation--------------------//
   	public static void validateordId(int orderId) throws InvoiceExceptionHandler 
   	{
   		//String ordID = String.valueOf(orderId);
@@ -353,10 +344,31 @@ public class Invoice
   		{
   			throw new InvoiceExceptionHandler("OrderId not specified or invalid");
   		}
-  		else if(orderId > 100) 
+  		else if(orderId > 10000) 
   		{
   		throw new InvoiceExceptionHandler("OrderId exceeds Maximum");
   		}
+  		
+  		try 
+  		{
+  	        String checkQuery = "SELECT COUNT(*) FROM invoice WHERE OrderId = ?";
+  	        PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+  	        checkStmt.setInt(1, orderId);
+  	        ResultSet checkResult = checkStmt.executeQuery();
+  	        checkResult.next();
+  	        int count = checkResult.getInt(1);
+
+  	        if (count > 0) 
+  	        {
+  	            throw new InvoiceExceptionHandler("Error: Duplicate Invoice Exists");
+  	        }
+  	        
+  	        checkStmt.close();
+  	    } 
+  		catch (SQLException sqle) 
+  		{
+  			System.out.println("SQL Error: " + sqle.getMessage());
+  	    }
   	}
   		
   	public static void validateinvoiceDate(String invoiceDate) throws InvoiceExceptionHandler 
@@ -370,7 +382,9 @@ public class Invoice
   		    try 
   		    {
   		        dateFormat.parse(invoiceDate);
-  		    } catch (ParseException e) {
+  		    } 
+  		    catch (ParseException e) 
+  		    {
   		        throw new InvoiceExceptionHandler("Invoice date is invalid, expected format is yyyy-mm-dd");
   		    }
   	}
