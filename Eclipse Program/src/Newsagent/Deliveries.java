@@ -5,23 +5,23 @@ import java.util.Scanner;
 
 public class Deliveries
 {
-	private int deliveryArea; //1-24
-	private String deliveryDate;
-	private int orderQuantity;
+	private int deliveryArea; // Areas = 1-24
+	private String deliveryDate; // Format = yyyy-mm-dd
+	private int deliveryQuantity;
 	private double deliveryValue;
 	
 
-//----------Constructor----------//
-	public Deliveries(int deliveryArea, String deliveryDate, int orderQuantity, double deliveryValue) 
+//--------------------Constructor--------------------//
+	public Deliveries(int deliveryArea, String deliveryDate, int deliveryrQuantity, double deliveryValue) 
 	{
 		this.deliveryArea = deliveryArea;
 		this.deliveryDate = deliveryDate;
-		this.orderQuantity = orderQuantity;
+		this.deliveryQuantity = deliveryQuantity;
 		this.deliveryValue = deliveryValue;
 	}
 
 	
-//----------Getters & Setters----------//
+//--------------------Getters & Setters--------------------//
 	public int getDeliveryArea() {
 		return deliveryArea;
 	}
@@ -36,11 +36,11 @@ public class Deliveries
 		this.deliveryDate = deliveryDate;
 	}
 
-	public int getOrderQuantity() {
-		return orderQuantity;
+	public int getDeliveryQuantity() {
+		return deliveryQuantity;
 	}
-	public void setOrderQuantity(int orderQuantity) {
-		this.orderQuantity = orderQuantity;
+	public void setDeliveryQuantity(int deliveryQuantity) {
+		this.deliveryQuantity = deliveryQuantity;
 	}
 
 	public double getDeliveryValue() {
@@ -50,7 +50,8 @@ public class Deliveries
 		this.deliveryValue = deliveryValue;
 	}
 	
-//----------Database----------//
+	
+//--------------------Database Connection--------------------//
 	static Connection con = null;
 	static Statement stmt = null;
    	static ResultSet rs = null;
@@ -70,6 +71,7 @@ public class Deliveries
     }
     	
     
+//--------------------Main--------------------//
     public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler, OrderExceptionHandler
     {
         Scanner in = new Scanner(System.in);
@@ -98,7 +100,7 @@ public class Deliveries
         			displayDeliveries();
         			break;
         		case 3:
-        			updateDeliveries();
+        			updateDeliveries(in);
         			break;
         		case 4:
         			deleteDelivery(in);
@@ -135,7 +137,7 @@ public class Deliveries
     }
     	
         	
-//----------Create: Add DeliveryD----------//
+//--------------------CREATE: Add a DeliveryDocket to the Database--------------------//
    	public static void addDeliveryD(Scanner in)
    	{
         try 
@@ -152,19 +154,19 @@ public class Deliveries
             String deliveryDate = in.nextLine();
             validatedeliveryDate(deliveryDate);
             System.out.println("Please Enter the Delivery Quantity: ");
-            int orderQuantity = in.nextInt();
-            validatedeliveryQuantity(orderQuantity);
+            int deliveryQuantity = in.nextInt();
+            validatedeliveryQuantity(deliveryQuantity);
             in.nextLine();
             System.out.println("Please Enter the Delivery Value: ");
             double deliveryValue = in.nextDouble();
             validatedeliveryValue(deliveryValue);
             in.nextLine();
-            	
+            validateDelivery(deliveryArea, deliveryDate);	
             // Prepare the statement
             PreparedStatement pstmt = con.prepareStatement(str);
             pstmt.setInt(1, deliveryArea);
             pstmt.setString(2, deliveryDate);
-            pstmt.setInt(3, orderQuantity);
+            pstmt.setInt(3, deliveryQuantity);
             pstmt.setDouble(4, deliveryValue);
 
             // Execute the update
@@ -191,7 +193,7 @@ public class Deliveries
    }	
    	
    	
-//----------Read: Display Deliveries----------//
+//--------------------READ: Display DeliveryDockets from the Database--------------------//
     public static void displayDeliveries() 
     {
     	try 
@@ -201,10 +203,11 @@ public class Deliveries
             rs = stmt.executeQuery(query);
             while (rs.next()) 
             {
-            	System.out.println("Delivery Area: " + rs.getInt("deliveryArea"));
-            	System.out.println("Delivery Date: " + rs.getString("deliveryDate"));
-            	System.out.println("Delivery Quantity: " + rs.getInt("DeliveryQuantity"));
-            	System.out.println("Delivery Value: €" + rs.getDouble("deliveryValue"));
+            	System.out.println("Delivery Id: " +rs.getInt("deliveryId"));
+            	System.out.println("Area: " + rs.getInt("deliveryArea"));
+            	System.out.println("Date: " + rs.getString("deliveryDate"));
+            	System.out.println("Quantity: " + rs.getInt("deliveryQuantity"));
+            	System.out.println("Value: €" + rs.getDouble("deliveryValue"));
             	System.out.println("-------------------------------");
     		}
     	} 
@@ -215,28 +218,121 @@ public class Deliveries
     }
     
     
-//----------Update: Change a Delivery info----------//
-    public static void updateDeliveries()
+//--------------------UPDATE: Change a DeliveryDocket in the Database--------------------//
+    public static void updateDeliveries(Scanner in)
     {
-    	
+    	try 
+    	{
+        	// Ask user for the DeliveryDocket they want to modify
+            System.out.println("Please Enter the DeliveryId of the Docket to Update:");
+            int deliveryId = in.nextInt();
+            in.nextLine();
+
+         // SQL query to find the DeliveryDocket by Id
+            String selectStr = "SELECT * FROM delivery_docket WHERE DeliveryId = ?";
+
+         // Prepare statement to execute the query
+            PreparedStatement pstmtSelect = con.prepareStatement(selectStr);
+            pstmtSelect.setInt(1, deliveryId);
+
+            // Execute the select query
+            rs = pstmtSelect.executeQuery();
+
+            // Check if the DeliveryDocket exists
+            if (rs.next()) 
+            {
+            	// Display the current details of the DeliveryDocket
+                System.out.println("Delivery Docket found ");
+                System.out.println("Current details - DeliveryId: " + rs.getInt("DeliveryId")
+                				   + ", Area: " + rs.getInt("DeliveryArea")
+                                   + ", Date: " + rs.getString("DeliveryDate")
+                                   + ", Quantity: " + rs.getInt("DeliveryQuantity")
+                                   + ", Value: €" + rs.getDouble("DeliveryValue"));
+
+                // Ask the user if they want to change the DeliveryDocket
+                System.out.println("Do you want to change this Invoice? (yes/no):");
+                String changeDeliveryDocket = in.nextLine();
+
+                if (changeDeliveryDocket.equalsIgnoreCase("yes")) 
+                {
+                	// Ask user for new Delivery Area
+                	System.out.println("Enter new Delivery Area (current: " + rs.getInt("DeliveryArea") + "): ");
+                	int newDeliveryArea = in.nextInt();
+                	validatedeliveryArea(newDeliveryArea);
+                	in.nextLine();
+        
+                	// Ask user for new Delivery Date
+                	System.out.println("Enter new Date (current: " + rs.getString("DeliveryDate") + "):");
+                	String newDeliveryDate = in.nextLine();
+                	validatedeliveryDate(newDeliveryDate);
+                	
+                	// Ask user for new Delivery Quantity
+                	System.out.println("Enter new Quantity (current: " + rs.getInt("DeliveryQuantity") + "):");
+                	int newDeliveryQuantity = in.nextInt();
+                	validatedeliveryQuantity(newDeliveryQuantity);
+                	in.nextLine();
+                	
+                	// Ask user for new Delivery Value
+                	System.out.println("Enter new Value (current: €" + rs.getDouble("DeliveryValue") + "):");
+                	double newDeliveryValue = in.nextDouble();
+                	validatedeliveryValue(newDeliveryValue);
+                	in.nextLine();
+                	validateDelivery(newDeliveryArea, newDeliveryDate);
+                	
+                	// SQL update statement to Update the DeliveryDocket
+                	String updateStr = "UPDATE delivery_docket SET DeliveryArea = ?, DeliveryDate = ?, DeliveryQuantity = ?, DeliveryValue = ? Where DeliveryId = ?";
+
+                	// Prepare the update statement
+                	PreparedStatement pstmtUpdate = con.prepareStatement(updateStr);
+                	pstmtUpdate.setInt(1, newDeliveryArea);
+                	pstmtUpdate.setString(2, newDeliveryDate);
+                	pstmtUpdate.setInt(3, newDeliveryQuantity);
+                	pstmtUpdate.setDouble(4, newDeliveryValue);
+                	pstmtUpdate.setInt(5, deliveryId);
+
+                	// Execute the update
+                	int rows1 = pstmtUpdate.executeUpdate();
+
+                	// Check if the update was successful
+                	if (rows1 > 0) 
+                	{
+                		System.out.println("Delivery Docket updated successfully!");// Success message
+                	} 
+                	else 
+                	{
+                		System.out.println("Failed to update Delivery Docket.");// Failure message
+                	}
+                	pstmtUpdate.close(); // Close the prepared statement
+                } 
+                else 
+                {
+                	System.out.println("Delivery Docket with DeliveryId '" + deliveryId + "' not found."); // If DeliveryDocket does not exist
+                }
+            }   
+    	} 
+        catch (SQLException sqle) 
+        {
+        	System.out.println("Error: " + sqle.getMessage()); // Handle SQL exceptions
+        } 
+        catch (DeliveryExceptionHandler e) 
+        {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
     
     
-//----------Delete: Remove a Delivery----------//
+//--------------------DELETE: Remove a DeliveryDocket from the Database--------------------//
     public static void deleteDelivery(Scanner in)
     {
     	try {
         	// Ask the user for the date of the Docket to delete
-            System.out.println("Please Enter the Date of the DeliveryDocket to delete: ");
-            String deliveryDate = in.nextLine();
-            System.out.println("Please Enter the Area of the DeliveryDocket to delete: ");
-            int deliveryArea = in.nextInt();
-            String deleteStr = "DELETE FROM delivery_docket WHERE DeliveryDate = ? AND DeliveryArea LIKE ?";
+            System.out.println("Please Enter the Id of the DeliveryDocket to delete: ");
+            int deliveryId = in.nextInt();
+            String deleteStr = "DELETE FROM delivery_docket WHERE DeliveryId = ?";
 
          // Prepare and execute the delete query
             PreparedStatement pstmt = con.prepareStatement(deleteStr);
-            pstmt.setString(1, deliveryDate);
-            pstmt.setInt(2, deliveryArea);
+            pstmt.setInt(1, deliveryId);
             int rows = pstmt.executeUpdate();
 
             // Check if the delete was successful
@@ -252,7 +348,7 @@ public class Deliveries
     }
     
     
-  //----------Validation----------//
+//--------------------Validation--------------------//
   	public static void validatedeliveryArea(int deliveryArea) throws DeliveryExceptionHandler 
   	{
   	    if(deliveryArea <= 0) 
@@ -295,6 +391,31 @@ public class Deliveries
   		{
   			throw new DeliveryExceptionHandler("Total cannot be negative");
   		}
+  	}
+  	
+  	public static void validateDelivery(int deliveryArea, String deliveryDate) throws DeliveryExceptionHandler 
+  	{
+  		try 
+  		{
+  	        String checkQuery = "SELECT COUNT(*) FROM delivery_docket WHERE DeliveryArea = ? AND DeliveryDate = ?";
+  	        PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+  	        checkStmt.setInt(1, deliveryArea);
+  	        checkStmt.setString(2, deliveryDate);
+  	        ResultSet checkResult = checkStmt.executeQuery();
+  	        checkResult.next();
+  	        int count = checkResult.getInt(1);
+
+  	        if (count > 0) 
+  	        {
+  	            throw new DeliveryExceptionHandler("Error: Duplicate Docket Exists");
+  	        }
+  	        
+  	        checkStmt.close();
+  	    } 
+  		catch (SQLException sqle) 
+  		{
+  			 System.out.println("SQL Error: " + sqle.getMessage());
+  	    }
   	}
 }
 
