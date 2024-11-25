@@ -1,0 +1,2 @@
+use your databses and enter this code to alter your order table
+ALTER TABLE orders CHANGE CustomerId Quantity INT;

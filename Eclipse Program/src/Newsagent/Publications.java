@@ -1,11 +1,21 @@
-package Newsagent;
+//package Newsagent;
 import java.sql.*;
 import java.util.Scanner;
+
+class PublicationExceptionHandler extends Exception 
+{
+    public PublicationExceptionHandler(String message) 
+    {
+        super(message);
+    }
+} 
 
 public class Publications {
     static Connection con = null;     // Database connection object
     static Statement stmt = null;  // Statement object for executing queries
     static ResultSet rs = null;      // ResultSet object for handling query results
+
+
 
  //------------Main method where the program execution starts---------//
     public static void main(String[] args) {
@@ -13,7 +23,9 @@ public class Publications {
         init_db(); // Open the connection to the database
         boolean running = true;// Flag to keep the program running in a loop
 
-     //----------Loop to display the menu and handle user input-------------//
+
+
+//----------Loop to display the menu and handle user input-------------//
         while (running) {
             System.out.println("Choose an Option:");
             System.out.println("1. Add a new publication");
@@ -25,7 +37,9 @@ public class Publications {
             int choice = in.nextInt(); // Read user's choice
             in.nextLine();  // Consume newline character left after integer input
 
-            //------Handle user's choice using switch statement-----//
+
+
+ //-----------Handle user's choice using switch statement-----------------//
             switch (choice) {
                 case 1:
                     addPublication(in); // Call addPublication method to add a new publication
@@ -40,15 +54,17 @@ public class Publications {
                     deletePublication(in); // Call deletePublication method to delete a publication
                     break;
                 case 5:
-                    running = false; // Exit the loop and end the program
-                    System.out.println("Exiting...");
+                	System.out.println("Exiting...");
+                    close_db();
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again."); // Handle invalid choice
             }
         }
 
-        //----Close the database connection----//
+
+//-------------Close the database connection----------------------//
         try {
             if (con != null) {
                 con.close(); // Close database connection
@@ -64,7 +80,39 @@ public class Publications {
         }
     }
 
- // -----------Method to initialize the database connection------------------//
+
+    private static void close_db() {
+        // Close ResultSet
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR: Failed to close the ResultSet");
+        }
+
+        // Close Statement
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR: Failed to close the Statement");
+        }
+
+        // Close Connection
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR: Failed to close the Connection");
+        }
+    }
+
+
+
+// -----------Method to initialize the database connection------------------//
     public static void init_db() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");// Load MySQL JDBC driver
@@ -76,7 +124,9 @@ public class Publications {
         }
     }
 
- // --------------Method to add a new publication to the database--------------//
+
+
+// --------------CREATE: Method to add a new publication to the database--------------//
     public static void addPublication(Scanner in) {
         try {
         	// Prompt user for publication details
@@ -92,11 +142,9 @@ public class Publications {
             System.out.println("Please Enter the Schedule:");
             String schedule = in.nextLine(); // Read publication schedule
 
-         // Validate the input schedule (Daily, Weekly, Monthly)
-            validateschedule(schedule);
+            validateschedule(schedule); // Validate the input schedule (Daily, Weekly, Monthly)
 
-         // SQL query to insert a new publication into the database
-            String insertStr = "INSERT INTO publication (PublicationName, PublicationPrice, Schedule) VALUES (?, ?, ?)";
+            String insertStr = "INSERT INTO publication (PublicationName, PublicationPrice, Schedule) VALUES (?, ?, ?)";    // SQL query to insert a new publication into the database
 
          // Prepare statement to prevent SQL injection
             PreparedStatement pstmt = con.prepareStatement(insertStr);
@@ -119,7 +167,10 @@ public class Publications {
         }
     }
 
- //----------Method to display all publications from the database------------//
+
+
+
+ //----------------READ: Method to display all publications from the database------------//
     public static void displayPublications() {
         try {
         	// SQL query to select all publications from the database
@@ -143,7 +194,10 @@ public class Publications {
         }
     }
 
- //---------------Method to modify an existing publication's details----------------//
+
+
+
+ //---------------UPDATE: Method to modify an existing publication's details----------------//
     public static void modifyPublication(Scanner in) {
         try {
         	// Ask user for the publication name they want to modify
@@ -239,7 +293,9 @@ public class Publications {
         }
     }
 
- //---------------Method to delete a publication from the database-----------//
+
+
+ //-----------------------DELETE: Method to delete a publication from the database-----------//
     public static void deletePublication(Scanner in) {
         try {
         	// Ask the user for the name of the publication to delete
@@ -269,6 +325,8 @@ public class Publications {
     }
 
 
+
+//----------------------------VALIDATES--------------------------------//
     // Validate schedule input to ensure it's valid
     public static void validateschedule(String schedule) throws PublicationExceptionHandler {
         if (!(schedule.equalsIgnoreCase("Daily") || schedule.equalsIgnoreCase("Weekly") || schedule.equalsIgnoreCase("Monthly"))) {
