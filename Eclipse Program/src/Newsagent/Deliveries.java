@@ -357,7 +357,7 @@ public class Deliveries
   	    }
   	    if(deliveryArea > 25) 
   	    {
-  	        throw new DeliveryExceptionHandler("Delivery Area exceeds Maximum");
+  	        throw new DeliveryExceptionHandler("Delivery Area invalid. Area = 1-24");
   	    }
   	}
   	
