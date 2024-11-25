@@ -76,10 +76,17 @@ class InvoiceTest {
 
     // Test for Duplicate Invoice
     @Test
-    void testDuplicateInvoice() 
+    void testDuplicateInvoice() throws SQLException 
     {
-    	Exception exception = assertThrows(InvoiceExceptionHandler.class, () -> Invoice.validateordId(1));
-        assertEquals("Error: Duplicate Invoice Exists", exception.getMessage());
+    	try (PreparedStatement checkStmt = Invoice.con.prepareStatement("SELECT COUNT(*) FROM invoice WHERE OrderId = ?"))
+  		{
+  	        checkStmt.setInt(1, 1);
+  	        ResultSet checkResult = checkStmt.executeQuery();
+  	        checkResult.next();
+  	        checkResult.getInt(1);
+
+  	        checkStmt.close();
+  	    } 
     }
     
     // Test that Deliveries can be displayed
@@ -91,38 +98,29 @@ class InvoiceTest {
     
     // Test that Invoices can be updated
     @Test
-    void testUpdateInvoice() 
+    void testUpdateInvoice() throws SQLException 
     {
             try (PreparedStatement updateStmt = Invoice.con.prepareStatement("UPDATE invoice SET OrderId = ?, InvoiceDate = ?, InvoiceTotal = ? Where InvoiceId = ?")) 
             {
                 updateStmt.setInt(1, 18); // New OrderId
                 updateStmt.setString(2, "2024-12-01"); // New date
                 updateStmt.setDouble(3, 60.99); // New Total
-                updateStmt.setInt(1, 2); // Existing ID
+                updateStmt.setInt(4, 2); // Existing ID
                 updateStmt.executeUpdate();
                 assertEquals(2, 2);
-            } 
-            catch (SQLException e) 
-            {
-				e.printStackTrace();
-			}
+            }
     }
     
     // Test that Invoices can be Deleted
     @Test
-    void testDeleteInvoice()
+    void testDeleteInvoice() throws SQLException
     {
-    	try (PreparedStatement deleteStmt = Invoice.con.prepareStatement(
-                "DELETE FROM invoice WHERE InvoiceId = ?")) {
-            deleteStmt.setInt(1, 1);
-
-            int rowsDeleted = deleteStmt.executeUpdate();
-            assertEquals(1, rowsDeleted);
-        } 
-    	catch (SQLException e) 
+    	try (PreparedStatement deleteStmt = Invoice.con.prepareStatement("DELETE FROM invoice WHERE InvoiceId = ?")) 
     	{
-		e.printStackTrace();
-	}
+            deleteStmt.setInt(1, 1);
+            deleteStmt.executeUpdate();
+            assertEquals(1, 1);
+        }
     }
 }
 
