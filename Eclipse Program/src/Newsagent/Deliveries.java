@@ -12,7 +12,7 @@ public class Deliveries
 	
 
 //--------------------Constructor--------------------//
-	public Deliveries(int deliveryArea, String deliveryDate, int deliveryrQuantity, double deliveryValue) 
+	public Deliveries(int deliveryArea, String deliveryDate, int deliveryQuantity, double deliveryValue) 
 	{
 		this.deliveryArea = deliveryArea;
 		this.deliveryDate = deliveryDate;
