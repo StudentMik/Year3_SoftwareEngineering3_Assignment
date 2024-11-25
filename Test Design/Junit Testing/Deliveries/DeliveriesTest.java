@@ -35,7 +35,7 @@ class DeliveriesTest
     void testInvalidDeliveryAreaExceedsMax() 
     {
         Exception exception = assertThrows(DeliveryExceptionHandler.class, () -> Deliveries.validatedeliveryArea(26));
-        assertEquals("Delivery Area exceeds Maximum", exception.getMessage());
+        assertEquals("Delivery Area invalid. Area = 1-24", exception.getMessage());
     }
 
     
