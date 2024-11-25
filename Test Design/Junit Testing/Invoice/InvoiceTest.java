@@ -32,14 +32,14 @@ class InvoiceTest {
 	
 	// Test for Valid Invoice Date
     @Test
-    void testValidDeliveryDate() 
+    void testValidInvoiceDate() 
     {
         assertDoesNotThrow(() -> Invoice.validateinvoiceDate("2024-11-25"));
     }
 
     // Test for Invalid Invoice Date Format
     @Test
-    void testInvalidDeliveryDateFormat() {
+    void testInvalidInvoiceDateFormat() {
         Exception exception = assertThrows(InvoiceExceptionHandler.class, () -> Invoice.validateinvoiceDate("25-11-2024"));
         assertEquals("Invoice date is invalid, expected format is yyyy-mm-dd", exception.getMessage());
     }
