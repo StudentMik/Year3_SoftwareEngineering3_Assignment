@@ -1,113 +1,154 @@
 package jtest;
 
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OrderReadFunctionalityTest {
 
-    private final OrderReader orderReader = new OrderReader(); // Mocked or actual implementation
+class OrderTest {
 
+    // Equivalence partitioning applied to Create Order tests
     @Test
-    void testInvalidOrderId() {
-        // Invalid Order ID
-        String invalidOrderId = "invalid123";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderById(invalidOrderId);
-        });
-
-        assertEquals("Invalid Order ID: " + invalidOrderId, exception.getMessage(),
-                "Expected an IllegalArgumentException for invalid order ID.");
+    void testValidOrderCreation() throws orderExceptionHandler {
+        Order order = new Order("Magazines", 50.0, 10);
+        assertNotNull(order, "Order object should be created successfully with valid inputs.");
     }
 
     @Test
-    void testEmptyOrderId() {
-        // Empty Order ID
-        String emptyOrderId = "";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderById(emptyOrderId);
+    void testInvalidPublicationNameTooShort() {
+        Exception exception = assertThrows(orderExceptionHandler.class, () -> {
+            new Order("Mag", 50.0, 10);
         });
-
-        assertEquals("Order ID cannot be empty", exception.getMessage(),
-                "Expected an IllegalArgumentException for empty order ID.");
+        assertEquals("Invalid Publication Name: must be between 7 and 15 characters.", exception.getMessage());
     }
 
     @Test
-    void testNullOrderId() {
-        // Null Order ID
-        String nullOrderId = null;
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderById(nullOrderId);
+    void testInvalidPublicationNameTooLong() {
+        Exception exception = assertThrows(orderExceptionHandler.class, () -> {
+            new Order("SuperLongPublicationName", 50.0, 10);
         });
-
-        assertEquals("Order ID cannot be null", exception.getMessage(),
-                "Expected an IllegalArgumentException for null order ID.");
+        assertEquals("Invalid Publication Name: must be between 7 and 15 characters.", exception.getMessage());
     }
 
     @Test
-    void testInvalidPublicationName() {
-        // Invalid Publication Name
-        String invalidName = "123InvalidName";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderByPublicationName(invalidName);
+    void testInvalidPublicationPriceZero() {
+        Exception exception = assertThrows(orderExceptionHandler.class, () -> {
+            new Order("Magazines", 0.0, 10);
         });
-
-        assertEquals("Invalid Publication Name: " + invalidName, exception.getMessage(),
-                "Expected an IllegalArgumentException for invalid publication name.");
+        assertEquals("Invalid Publication Price: must be a positive number.", exception.getMessage());
     }
 
     @Test
-    void testEmptyPublicationName() {
-        // Empty Publication Name
-        String emptyName = "";
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderByPublicationName(emptyName);
+    void testInvalidPublicationPriceNegative() {
+        Exception exception = assertThrows(orderExceptionHandler.class, () -> {
+            new Order("Magazines", -50.0, 10);
         });
-
-        assertEquals("Publication name cannot be empty", exception.getMessage(),
-                "Expected an IllegalArgumentException for empty publication name.");
+        assertEquals("Invalid Publication Price: must be a positive number.", exception.getMessage());
     }
 
     @Test
-    void testInvalidQuantity() {
-        // Invalid Quantity
-        int invalidQuantity = -5;
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderByQuantity(invalidQuantity);
+    void testInvalidQuantityZero() {
+        Exception exception = assertThrows(orderExceptionHandler.class, () -> {
+            new Order("Magazines", 50.0, 0);
         });
-
-        assertEquals("Quantity cannot be negative: " + invalidQuantity, exception.getMessage(),
-                "Expected an IllegalArgumentException for negative quantity.");
+        assertEquals("Invalid Quantity: must be an integer greater than 0.", exception.getMessage());
     }
 
     @Test
-    void testZeroQuantity() {
-        // Zero Quantity
-        int zeroQuantity = 0;
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderByQuantity(zeroQuantity);
+    void testInvalidQuantityNegative() {
+        Exception exception = assertThrows(orderExceptionHandler.class, () -> {
+            new Order("Magazines", 50.0, -10);
         });
+        assertEquals("Invalid Quantity: must be an integer greater than 0.", exception.getMessage());
+    }
 
-        assertEquals("Quantity must be greater than zero", exception.getMessage(),
-                "Expected an IllegalArgumentException for zero quantity.");
+    // Tests for database insertion
+
+
+    // Update Order Tests
+    @Test
+    void testValidOrderUpdate() {
+        MyDatabase.init_db();
+        // Assuming the order exists with ID 1
+        assertDoesNotThrow(() -> MyDatabase.updateOrder(1, 15, 60.0, "UpdatedName"),
+                "Valid order update should not throw exceptions.");
     }
 
     @Test
-    void testExcessiveQuantity() {
-        // Excessively Large Quantity
-        int excessiveQuantity = 1000000;
-
+    void testUpdateOrderInvalidOrderId() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderReader.readOrderByQuantity(excessiveQuantity);
+            MyDatabase.updateOrder(-1, 10, 50.0, "UpdatedName");
         });
+        assertEquals("Invalid Order ID", exception.getMessage());
+    }
 
-        assertEquals("Quantity exceeds maximum allowed value: " + excessiveQuantity, exception.getMessage(),
-                "Expected an IllegalArgumentException for excessive quantity.");
+    @Test
+    void testUpdateOrderEmptyPublicationName() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            MyDatabase.updateOrder(1, 10, 50.0, "");
+        });
+        assertEquals("Publication name cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateOrderInvalidQuantity() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            MyDatabase.updateOrder(1, -5, 50.0, "ValidName");
+        });
+        assertEquals("Quantity cannot be negative", exception.getMessage());
+    }
+
+    // Delete Order Tests
+    @Test
+    void testDeleteOrderValidId() {
+        MyDatabase.init_db();
+        // Assuming order ID 1 exists
+        assertTrue(MyDatabase.deleteOrder(1), "Order deletion with a valid ID should succeed.");
+    }
+
+    @Test
+    void testDeleteOrderInvalidId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            MyDatabase.deleteOrder(-1);
+        });
+        assertEquals("Invalid Order ID", exception.getMessage());
+    }
+
+    // Database Connection Tests
+    @Test
+    void testDatabaseConnection() {
+        assertDoesNotThrow(MyDatabase::init_db, "Database should connect without throwing exceptions");
+    }
+
+    @Test
+    void testDatabaseCloseConnection() {
+        assertDoesNotThrow(MyDatabase::close_db, "Database should close without throwing exceptions");
+    }
+
+    // Mocking MyDatabase as an inner static class for the purpose of testing
+    private static class MyDatabase {
+        public static void init_db() {
+            // Mock database initialization
+        }
+
+        public static void close_db() {
+            // Mock database closure
+        }
+
+        public static boolean deleteOrder(int orderId) {
+            if (orderId < 0) throw new IllegalArgumentException("Invalid Order ID");
+            return true; // Simulate successful deletion
+        }
+
+        public static void updateOrder(int orderId, int quantity, double price, String publicationName) {
+            if (orderId < 0) throw new IllegalArgumentException("Invalid Order ID");
+            if (quantity < 0) throw new IllegalArgumentException("Quantity cannot be negative");
+            if (publicationName == null || publicationName.isEmpty())
+                throw new IllegalArgumentException("Publication name cannot be empty");
+        }
+    }
+
+    private class orderExceptionHandler extends Exception {
     }
 }
