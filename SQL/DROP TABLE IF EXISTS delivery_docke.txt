@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS delivery_docket;
+
+-- Recreate the table with the new structure
+CREATE TABLE delivery_docket (
+    DeliveryId INT AUTO_INCREMENT PRIMARY KEY, -- Auto-incrementing delivery ID
+    DeliveryArea VARCHAR(100) NOT NULL,        -- New field for delivery area
+    DeliveryDate DATE NOT NULL,                -- Change to proper DATE type
+    OrderQuantity INT NOT NULL,                -- New field for order quantity
+    DeliveryValue DECIMAL(10,2) NOT NULL,      -- New field for delivery value
+    PublicationName VARCHAR(100) NOT NULL      -- Retain publication name
+);
