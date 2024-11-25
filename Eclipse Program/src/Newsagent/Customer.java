@@ -1,5 +1,4 @@
 package Newsagent;
-
 import java.util.Scanner;
 import java.sql.*;
 
