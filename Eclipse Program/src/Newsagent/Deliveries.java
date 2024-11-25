@@ -7,16 +7,16 @@ public class Deliveries
 {
 	private int deliveryArea; // Areas = 1-24
 	private String deliveryDate; // Format = yyyy-mm-dd
-	private int deliveryQuantity;
+	private int OrderQuantity;
 	private double deliveryValue;
 	
 
 //--------------------Constructor--------------------//
-	public Deliveries(int deliveryArea, String deliveryDate, int deliveryQuantity, double deliveryValue) 
+	public Deliveries(int deliveryArea, String deliveryDate, int OrderQuantity, double deliveryValue) 
 	{
 		this.deliveryArea = deliveryArea;
 		this.deliveryDate = deliveryDate;
-		this.deliveryQuantity = deliveryQuantity;
+		this.OrderQuantity = OrderQuantity;
 		this.deliveryValue = deliveryValue;
 	}
 
@@ -36,11 +36,11 @@ public class Deliveries
 		this.deliveryDate = deliveryDate;
 	}
 
-	public int getDeliveryQuantity() {
-		return deliveryQuantity;
+	public int getOrderQuantity() {
+		return OrderQuantity;
 	}
-	public void setDeliveryQuantity(int deliveryQuantity) {
-		this.deliveryQuantity = deliveryQuantity;
+	public void setOrderQuantity(int orderQuantity) {
+		this.OrderQuantity = orderQuantity;
 	}
 
 	public double getDeliveryValue() {
@@ -143,7 +143,7 @@ public class Deliveries
         try 
         {
         	// SQL insert statement for the delivery_docket table
-            String str = "INSERT INTO delivery_docket (DeliveryArea, DeliveryDate, DeliveryQuantity, DeliveryValue) VALUES (?, ?, ?, ?)";
+            String str = "INSERT INTO delivery_docket (DeliveryArea, DeliveryDate, OrderQuantity, DeliveryValue) VALUES (?, ?, ?, ?)";
 
             // Get delivery docket details from the user
             System.out.println("Please Enter the Delivery Area: ");
@@ -153,9 +153,9 @@ public class Deliveries
             System.out.println("Please Enter the Delivery Date (YYYY-MM-DD):");
             String deliveryDate = in.nextLine();
             validatedeliveryDate(deliveryDate);
-            System.out.println("Please Enter the Delivery Quantity: ");
-            int deliveryQuantity = in.nextInt();
-            validatedeliveryQuantity(deliveryQuantity);
+            System.out.println("Please Enter the Order Quantity: ");
+            int OrderQuantity = in.nextInt();
+            validatedeliveryQuantity(OrderQuantity);
             in.nextLine();
             System.out.println("Please Enter the Delivery Value: ");
             double deliveryValue = in.nextDouble();
@@ -166,7 +166,7 @@ public class Deliveries
             PreparedStatement pstmt = con.prepareStatement(str);
             pstmt.setInt(1, deliveryArea);
             pstmt.setString(2, deliveryDate);
-            pstmt.setInt(3, deliveryQuantity);
+            pstmt.setInt(3, OrderQuantity);
             pstmt.setDouble(4, deliveryValue);
 
             // Execute the update
@@ -206,7 +206,7 @@ public class Deliveries
             	System.out.println("Delivery Id: " +rs.getInt("deliveryId"));
             	System.out.println("Area: " + rs.getInt("deliveryArea"));
             	System.out.println("Date: " + rs.getString("deliveryDate"));
-            	System.out.println("Quantity: " + rs.getInt("deliveryQuantity"));
+            	System.out.println("Quantity: " + rs.getInt("OrderQuantity"));
             	System.out.println("Value: €" + rs.getDouble("deliveryValue"));
             	System.out.println("-------------------------------");
     		}
@@ -246,7 +246,7 @@ public class Deliveries
                 System.out.println("Current details - DeliveryId: " + rs.getInt("DeliveryId")
                 				   + ", Area: " + rs.getInt("DeliveryArea")
                                    + ", Date: " + rs.getString("DeliveryDate")
-                                   + ", Quantity: " + rs.getInt("DeliveryQuantity")
+                                   + ", Quantity: " + rs.getInt("OrderQuantity")
                                    + ", Value: €" + rs.getDouble("DeliveryValue"));
 
                 // Ask the user if they want to change the DeliveryDocket
@@ -267,7 +267,7 @@ public class Deliveries
                 	validatedeliveryDate(newDeliveryDate);
                 	
                 	// Ask user for new Delivery Quantity
-                	System.out.println("Enter new Quantity (current: " + rs.getInt("DeliveryQuantity") + "):");
+                	System.out.println("Enter new Quantity (current: " + rs.getInt("OrderQuantity") + "):");
                 	int newDeliveryQuantity = in.nextInt();
                 	validatedeliveryQuantity(newDeliveryQuantity);
                 	in.nextLine();
@@ -280,7 +280,7 @@ public class Deliveries
                 	validateDelivery(newDeliveryArea, newDeliveryDate);
                 	
                 	// SQL update statement to Update the DeliveryDocket
-                	String updateStr = "UPDATE delivery_docket SET DeliveryArea = ?, DeliveryDate = ?, DeliveryQuantity = ?, DeliveryValue = ? Where DeliveryId = ?";
+                	String updateStr = "UPDATE delivery_docket SET DeliveryArea = ?, DeliveryDate = ?, OrderQuantity = ?, DeliveryValue = ? Where DeliveryId = ?";
 
                 	// Prepare the update statement
                 	PreparedStatement pstmtUpdate = con.prepareStatement(updateStr);

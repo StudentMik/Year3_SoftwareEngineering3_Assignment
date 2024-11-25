@@ -18,7 +18,7 @@ public class Publications {
 
 
  //------------Main method where the program execution starts---------//
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler, OrderExceptionHandler {
         Scanner in = new Scanner(System.in); // Scanner for user input
         init_db(); // Open the connection to the database
         boolean running = true;// Flag to keep the program running in a loop
@@ -55,8 +55,10 @@ public class Publications {
                     break;
                 case 5:
                 	System.out.println("Exiting...");
-                    close_db();
-                    running = false;
+                    //close_db();
+                    //running = false;
+                	MainMenu.main(null);
+                	
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again."); // Handle invalid choice

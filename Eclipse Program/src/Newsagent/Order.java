@@ -52,7 +52,7 @@ public class Order {
 
     static Connection con = null;
 
-    public static void main(String[] args) throws OrderExceptionHandler {
+    public static void main(String[] args) throws OrderExceptionHandler, DeliveryExceptionHandler, InvoiceExceptionHandler, PublicationExceptionHandler, CustomerExceptionHandler {
         init_db();
         Scanner in = new Scanner(System.in);
 
@@ -86,9 +86,11 @@ public class Order {
                     break;
                 case 5:
                     System.out.println("Exiting the program.");
-                    close_db();
-                    in.close();
+                    //close_db();
+                    //in.close();
+                    MainMenu.main(null);
                     return;
+                    
                 default:
                     System.out.println("Error: Invalid Choice");
             }
