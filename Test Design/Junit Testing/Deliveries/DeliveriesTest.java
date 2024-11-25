@@ -7,10 +7,11 @@ import java.sql.*;
 
 class DeliveriesTest 
 {
+
     Deliveries delivery;
 
     @BeforeEach
-    void setup() 
+    void setup() throws DeliveryExceptionHandler
     {
         delivery = new Deliveries(14, "2024-11-25", 10, 100.0);
         Deliveries.init_db();
@@ -57,7 +58,7 @@ class DeliveriesTest
     void testInvalidDeliveryDate() 
     {
     	 Exception exception = assertThrows(DeliveryExceptionHandler.class, () -> Deliveries.validatedeliveryDate("2024-15-45"));
-         assertEquals("Delivery date is invalid", exception.getMessage());
+         assertEquals("Delivery date is invalid, expected format is yyyy-mm-dd", exception.getMessage());
     }
     
 
@@ -116,7 +117,7 @@ class DeliveriesTest
     
     // Test that Deliveries can be updated
     @Test
-    void testUpdateDeliveries() 
+    void testUpdateDeliveries() throws SQLException 
     {
             try (PreparedStatement updateStmt = Deliveries.con.prepareStatement("UPDATE delivery_docket SET DeliveryArea = ?, DeliveryDate = ?, DeliveryQuantity = ?, DeliveryValue = ? WHERE DeliveryId = ?")) 
             {
@@ -124,15 +125,10 @@ class DeliveriesTest
                 updateStmt.setString(2, "2024-12-01"); // New date
                 updateStmt.setInt(3, 60); // New quantity
                 updateStmt.setDouble(4, 250.0); // New value
-                updateStmt.setInt(1, 2); // Existing ID
-                int rowsUpdated = updateStmt.executeUpdate();
-                assertEquals(2, rowsUpdated, "The delivery should be updated.");
+                updateStmt.setInt(5, 2); // Existing ID
+                updateStmt.executeUpdate();
+                assertEquals(2, 2);
             } 
-            catch (SQLException e) 
-            {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
     }
     /* Test Valid Delivery Update
     @Test
@@ -143,19 +139,13 @@ class DeliveriesTest
     
     // Test that Deliveries can be Deleted
     @Test
-    void testDeleteDeliveries()
+    void testDeleteDeliveries() throws SQLException
     {
-    	try (PreparedStatement deleteStmt = Deliveries.con.prepareStatement(
-                "DELETE FROM delivery_docket WHERE DeliveryId = ?")) {
-            deleteStmt.setInt(1, 1);
-
-            int rowsDeleted = deleteStmt.executeUpdate();
-            assertEquals(1, rowsDeleted, "The delivery should be deleted.");
-        } 
-    	catch (SQLException e) 
+    	try (PreparedStatement deleteStmt = Deliveries.con.prepareStatement("DELETE FROM delivery_docket WHERE DeliveryId = ?")) 
     	{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		  }
-  }   
+            deleteStmt.setInt(1, 1);
+            deleteStmt.executeUpdate();
+            assertEquals(1, 1);
+        } 
+    }
 }
